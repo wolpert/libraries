@@ -6,19 +6,19 @@ aspectj = "1.9.22.1"
 assertj = "3.27.3"
 aws-dynamodblocal = "2.5.4"
 awsSDK1 = "1.12.782"
-awsSDK2 = "2.30.26"
+awsSDK2 = "2.30.31"
 commons-io = "2.18.0"
 dagger = "2.55"
 guava = "33.4.0-jre"
 jsr305 = "3.0.2"
 immutables = '2.10.1'
-jackson = '2.18.2'
+jackson = '2.18.3'
 junit-jupiter = "5.12.0"
 logback = '1.5.17'
 micrometer = '1.14.4'
 metrics = '4.2.30'
 mokito = '5.15.2'
-slf4j = '2.0.16'
+slf4j = '2.0.17'
 
 [libraries]
 aspectjrt = { module = "org.aspectj:aspectjrt", version.ref = "aspectj" }
