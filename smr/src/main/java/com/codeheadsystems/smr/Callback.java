@@ -9,10 +9,25 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface Callback {
 
+  /**
+   * Phase phase.
+   *
+   * @return the phase
+   */
   Phase phase();
 
+  /**
+   * State state.
+   *
+   * @return the state
+   */
   State state();
 
+  /**
+   * Context context.
+   *
+   * @return the context
+   */
   Context context();
 
 }

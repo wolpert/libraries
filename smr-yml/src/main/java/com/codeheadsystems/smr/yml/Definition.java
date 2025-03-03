@@ -7,11 +7,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Definition.
+ */
 public class Definition {
 
   private String initialState;
   private Map<String, Map<String, String>> transitions;
 
+  /**
+   * Disassemble definition.
+   *
+   * @param stateMachineDefinition the state machine definition
+   * @return the definition
+   */
   public static Definition disassemble(final StateMachineDefinition stateMachineDefinition) {
     Definition definition = new Definition();
     definition.setInitialState(stateMachineDefinition.initialState().name());
@@ -24,6 +33,11 @@ public class Definition {
     return definition;
   }
 
+  /**
+   * Assemble state machine definition.
+   *
+   * @return the state machine definition
+   */
   @JsonIgnore
   public StateMachineDefinition assemble() {
     StateMachineDefinition.Builder builder = StateMachineDefinition.builder();
@@ -43,18 +57,38 @@ public class Definition {
     return builder.setInitialState(State.of(initialState)).build();
   }
 
+  /**
+   * Gets initial state.
+   *
+   * @return the initial state
+   */
   public String getInitialState() {
     return initialState;
   }
 
+  /**
+   * Sets initial state.
+   *
+   * @param initialState the initial state
+   */
   public void setInitialState(final String initialState) {
     this.initialState = initialState;
   }
 
+  /**
+   * Gets transitions.
+   *
+   * @return the transitions
+   */
   public Map<String, Map<String, String>> getTransitions() {
     return transitions;
   }
 
+  /**
+   * Sets transitions.
+   *
+   * @param transitions the transitions
+   */
   public void setTransitions(final Map<String, Map<String, String>> transitions) {
     this.transitions = transitions;
   }

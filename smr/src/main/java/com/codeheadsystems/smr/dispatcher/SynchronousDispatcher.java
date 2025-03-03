@@ -16,12 +16,20 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The type Synchronous dispatcher.
+ */
 public class SynchronousDispatcher implements Dispatcher {
 
   private static final Logger log = LoggerFactory.getLogger(SynchronousDispatcher.class);
 
   private final Map<State, Set<Consumer<Callback>>[]> callbackMap;
 
+  /**
+   * Instantiates a new Synchronous dispatcher.
+   *
+   * @param states the states
+   */
   public SynchronousDispatcher(final Set<State> states) {
     log.info("SynchronousDispatcher()");
     this.callbackMap = states.stream()

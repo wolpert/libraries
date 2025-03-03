@@ -20,10 +20,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Hasher test.
+ */
 class HasherTest {
 
   private static final String SYSTEM = "DEFAULT";
 
+  /**
+   * Hash.
+   */
   @Test
   void hash() {
     final Hasher hasher = new Hasher(SYSTEM);
@@ -33,6 +39,9 @@ class HasherTest {
         .isEqualTo("a.b.c");
   }
 
+  /**
+   * Namespace empty.
+   */
   @Test
   void namespace_empty() {
     final Hasher hasher = new Hasher(SYSTEM);
@@ -42,6 +51,9 @@ class HasherTest {
         .isEqualTo("DEFAULT:com.codeheadsystems.oop.mock.HasherTest");
   }
 
+  /**
+   * Namespace not empty.
+   */
   @Test
   void namespace_notEmpty() {
     final String app = "OppMock";

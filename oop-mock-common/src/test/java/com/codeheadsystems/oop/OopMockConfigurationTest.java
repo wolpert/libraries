@@ -21,8 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.codeheadsystems.test.model.BaseJacksonTest;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Oop mock configuration test.
+ */
 class OopMockConfigurationTest extends BaseJacksonTest<OopMockConfiguration> {
 
+  /**
+   * The constant MOCK_DATA_FILE_NAME.
+   */
   public static final String MOCK_DATA_FILE_NAME = "filename";
 
   @Override
@@ -45,6 +51,9 @@ class OopMockConfigurationTest extends BaseJacksonTest<OopMockConfiguration> {
         .build();
   }
 
+  /**
+   * Test mock data file named.
+   */
   @Test
   void testMockDataFileNamed() {
     assertThat(getInstance().mockDataFileName())
@@ -54,6 +63,9 @@ class OopMockConfigurationTest extends BaseJacksonTest<OopMockConfiguration> {
         .isEmpty();
   }
 
+  /**
+   * Test enabled.
+   */
   @Test
   void testEnabled() {
     assertThat(getInstance().enabled())
@@ -62,6 +74,9 @@ class OopMockConfigurationTest extends BaseJacksonTest<OopMockConfiguration> {
         .isFalse();
   }
 
+  /**
+   * Test delay response enabled.
+   */
   @Test
   void testDelayResponseEnabled() {
     assertThat(getInstance().delayResponseEnabled())

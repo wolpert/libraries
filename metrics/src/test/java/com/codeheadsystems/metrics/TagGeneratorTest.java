@@ -12,6 +12,9 @@ public class TagGeneratorTest {
   private static final Tags TAGS = Tags.of("a", "1", "b", "2");
   private static final Tags UPDATED = Tags.of("b", "3", "c", "4");
 
+  /**
+   * Supplier works.
+   */
   @Test
   void supplierWorks() {
     TagsGenerator<String> tagsSupplier = s -> TAGS;
@@ -19,6 +22,9 @@ public class TagGeneratorTest {
         .isEqualTo(TAGS);
   }
 
+  /**
+   * With works.
+   */
   @Test
   void withWorks() {
     TagsGenerator<String> tagsSupplier = s -> UPDATED;

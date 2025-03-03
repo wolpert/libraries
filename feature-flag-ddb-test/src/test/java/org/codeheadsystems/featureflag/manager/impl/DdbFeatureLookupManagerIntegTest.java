@@ -7,6 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
+/**
+ * The type Ddb feature lookup manager integ test.
+ */
 @ExtendWith(DynamoDbExtension.class)
 class DdbFeatureLookupManagerIntegTest extends FeatureLookupManagerIntegTest {
 
@@ -14,6 +17,9 @@ class DdbFeatureLookupManagerIntegTest extends FeatureLookupManagerIntegTest {
 
   @DataStore private DynamoDbClient dbClient;
 
+  /**
+   * Sets database.
+   */
   @BeforeEach
   void setupDatabase() {
     final DdbControlPlane ddbControlPlane = new DdbControlPlane(DB_CONFIGURATION, dbClient);

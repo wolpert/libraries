@@ -16,6 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Enablement factory test.
+ */
 @ExtendWith(MockitoExtension.class)
 class EnablementFactoryTest {
 
@@ -60,6 +63,13 @@ class EnablementFactoryTest {
     );
   }
 
+  /**
+   * Generate.
+   *
+   * @param featurePercentage the feature percentage
+   * @param hashCodeInt       the hash code int
+   * @param expected          the expected
+   */
   @ParameterizedTest
   @MethodSource("provideGenerate")
   void generate(final double featurePercentage, final int hashCodeInt, final boolean expected) {
@@ -70,16 +80,29 @@ class EnablementFactoryTest {
         .isEqualTo(expected);
   }
 
+  /**
+   * Enabled feature.
+   */
   @Test
   void enabledFeature() {
     assertThat(enablementFactory.enabledFeature().enabled(TEST)).isTrue();
   }
 
+  /**
+   * Disabled feature.
+   */
   @Test
   void disabledFeature() {
     assertThat(enablementFactory.disabledFeature().enabled(TEST)).isFalse();
   }
 
+  /**
+   * Percentage feature.
+   *
+   * @param featurePercentage the feature percentage
+   * @param hashCodeInt       the hash code int
+   * @param expected          the expected
+   */
   @ParameterizedTest
   @MethodSource("provideGenerate")
   void percentageFeature(final double featurePercentage, final int hashCodeInt, final boolean expected) {

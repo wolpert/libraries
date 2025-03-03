@@ -66,13 +66,13 @@ public interface Metrics {
   /**
    * Times the action in the supplier.
    *
+   * @param <R>                       the type of result from the supplier.
+   * @param <E>                       the exception the supplier can throw.
    * @param metricName                to store the time.
    * @param supplier                  which is called to get the result.
    * @param tagsGeneratorForResult    optional generator for tags based on the result.
    * @param tagsGeneratorForThrowable optional tag generator for any thrown exception.
    * @param tags                      optional tags you may want to include.
-   * @param <R>                       the type of result from the supplier.
-   * @param <E>                       the exception the supplier can throw.
    * @return the result of the supplier.
    * @throws E if the supplier throws an exception.
    */
@@ -85,13 +85,13 @@ public interface Metrics {
   /**
    * Times the action in the supplier.
    *
+   * @param <R>                       the type of result from the supplier.
+   * @param <E>                       the exception the supplier can throw.
    * @param metricName                to store the time.
    * @param supplier                  which is called to get the result.
    * @param tagsGeneratorForResult    optional generator for tags based on the result.
    * @param tagsGeneratorForThrowable optional tag generator for any thrown exception.
    * @param tags                      optional tags you may want to include.
-   * @param <R>                       the type of result from the supplier.
-   * @param <E>                       the exception the supplier can throw.
    * @return the result of the supplier.
    * @throws E if the supplier throws an exception.
    */
@@ -106,11 +106,11 @@ public interface Metrics {
   /**
    * Times the action in the supplier.
    *
+   * @param <R>        the type of result from the supplier.
+   * @param <E>        the exception the supplier can throw.
    * @param metricName to store the time.
    * @param supplier   which is called to get the result.
    * @param tags       optional tags you may want to include.
-   * @param <R>        the type of result from the supplier.
-   * @param <E>        the exception the supplier can throw.
    * @return the result of the supplier.
    * @throws E if the supplier throws an exception.
    */
@@ -123,11 +123,11 @@ public interface Metrics {
   /**
    * Times the action in the supplier.
    *
-   * @param metricName to store the time.
-   * @param supplier   which is called to get the result.
-   * @param tags       optional tags you may want to include.
    * @param <R>        the type of result from the supplier.
    * @param <E>        the exception the supplier can throw.
+   * @param metricName to store the time.
+   * @param tags       optional tags you may want to include.
+   * @param supplier   which is called to get the result.
    * @return the result of the supplier.
    * @throws E if the supplier throws an exception.
    */
@@ -140,11 +140,11 @@ public interface Metrics {
   /**
    * Times the action in the supplier.
    *
+   * @param <R>        the type of result from the supplier.
+   * @param <E>        the exception the supplier can throw.
    * @param metricName to store the time.
    * @param supplier   which is called to get the result.
    * @param tags       optional tags you may want to include.
-   * @param <R>        the type of result from the supplier.
-   * @param <E>        the exception the supplier can throw.
    * @return the result of the supplier.
    * @throws E if the supplier throws an exception.
    */

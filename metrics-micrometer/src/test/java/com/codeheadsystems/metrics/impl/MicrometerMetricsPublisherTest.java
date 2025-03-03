@@ -16,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Micrometer metrics publisher test.
+ */
 @ExtendWith(MockitoExtension.class)
 class MicrometerMetricsPublisherTest {
 
@@ -30,6 +33,9 @@ class MicrometerMetricsPublisherTest {
 
   private MicrometerMetricsPublisher publisher;
 
+  /**
+   * Constructor meter registry count.
+   */
   @Test
   void constructor_MeterRegistry_count() {
     publisher = new MicrometerMetricsPublisher(meterRegistry);
@@ -39,6 +45,9 @@ class MicrometerMetricsPublisherTest {
     verify(counter).increment(1L);
   }
 
+  /**
+   * Constructor meter registry time.
+   */
   @Test
   void constructor_MeterRegistry_time() {
     publisher = new MicrometerMetricsPublisher(meterRegistry);

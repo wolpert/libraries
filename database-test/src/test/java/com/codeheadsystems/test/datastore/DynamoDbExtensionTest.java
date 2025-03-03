@@ -28,15 +28,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+/**
+ * The type Dynamo db extension test.
+ */
 @ExtendWith(DynamoDbExtension.class)
 class DynamoDbExtensionTest {
 
+  /**
+   * The constant ATTRIBUTE.
+   */
   public static final String ATTRIBUTE = "aAttribute";
+  /**
+   * The constant RANGE.
+   */
   public static final String RANGE = "aRange";
+  /**
+   * The constant HASH.
+   */
   public static final String HASH = "aHash";
   @DataStore private DynamoDBMapper mapper;
   @DataStore private AmazonDynamoDB amazonDynamoDb;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   void setup() {
     amazonDynamoDb.createTable(
@@ -44,24 +59,36 @@ class DynamoDbExtensionTest {
             .withBillingMode(BillingMode.PAY_PER_REQUEST));
   }
 
+  /**
+   * Tear down.
+   */
   @AfterEach
   void tearDown() {
     // force the table empty
     amazonDynamoDb.deleteTable(mapper.generateDeleteTableRequest(Entry.class));
   }
 
+  /**
+   * Test client.
+   */
   @Test
   void testClient() {
     assertThat(amazonDynamoDb)
         .isNotNull();
   }
 
+  /**
+   * Test mapper.
+   */
   @Test
   void testMapper() {
     assertThat(mapper)
         .isNotNull();
   }
 
+  /**
+   * Table exists and is empty.
+   */
   @Test
   void tableExistsAndIsEmpty() {
     final DynamoDBScanExpression expression = new DynamoDBScanExpression();
@@ -71,6 +98,9 @@ class DynamoDbExtensionTest {
         .isEmpty();
   }
 
+  /**
+   * We can add items.
+   */
   @Test
   void weCanAddItems() {
     final Entry entry = new Entry(HASH, RANGE, ATTRIBUTE);

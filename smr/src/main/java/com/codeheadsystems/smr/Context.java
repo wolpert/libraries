@@ -9,8 +9,18 @@ import java.util.concurrent.atomic.AtomicReference;
 @FunctionalInterface
 public interface Context {
 
+  /**
+   * Reference atomic reference.
+   *
+   * @return the atomic reference
+   */
   AtomicReference<State> reference();
 
+  /**
+   * State state.
+   *
+   * @return the state
+   */
   default State state() {
     return reference().get();
   }
@@ -20,8 +30,16 @@ public interface Context {
    */
   abstract class Impl implements Context {
 
+    /**
+     * The State.
+     */
     protected final AtomicReference<State> state;
 
+    /**
+     * Instantiates a new .
+     *
+     * @param initialState the initial state
+     */
     public Impl(State initialState) {
       this.state = new AtomicReference<>(initialState);
     }

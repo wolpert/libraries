@@ -22,15 +22,24 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Resource lookup manager test.
+ */
 class ResourceLookupManagerTest {
 
   private ResourceLookupManager manager;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   void setup() {
     manager = new ResourceLookupManager(Optional.empty());
   }
 
+  /**
+   * Input stream.
+   */
   @Test
   void inputStream() {
     assertThat(manager.inputStream("logback.xml"))
@@ -38,6 +47,9 @@ class ResourceLookupManagerTest {
         .isNotEmpty();
   }
 
+  /**
+   * Input stream not found.
+   */
   @Test
   void inputStream_notFound() {
     assertThat(manager.inputStream("I do not ExIsT"))

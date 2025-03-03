@@ -23,15 +23,24 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Object mapper factory test.
+ */
 class ObjectMapperFactoryTest {
 
   private ObjectMapperFactory objectMapperFactory;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     objectMapperFactory = new ObjectMapperFactory();
   }
 
+  /**
+   * Object mapper.
+   */
   @Test
   void objectMapper() {
     assertThat(objectMapperFactory.objectMapper())

@@ -10,10 +10,18 @@ import com.codeheadsystems.smr.Phase;
 import com.codeheadsystems.smr.State;
 import java.util.function.Consumer;
 
+/**
+ * The type Metrics decorator.
+ */
 public class MetricsDecorator implements Decorator<Dispatcher> {
 
   private final Metrics metrics;
 
+  /**
+   * Instantiates a new Metrics decorator.
+   *
+   * @param metrics the metrics
+   */
   public MetricsDecorator(final Metrics metrics) {
     this.metrics = metrics;
   }
@@ -23,10 +31,19 @@ public class MetricsDecorator implements Decorator<Dispatcher> {
     return new MetricsDispatcher(dispatcher, metrics);
   }
 
+  /**
+   * The type Metrics dispatcher.
+   */
   public static class MetricsDispatcher implements Dispatcher {
     private final Dispatcher dispatcher;
     private final Metrics metrics;
 
+    /**
+     * Instantiates a new Metrics dispatcher.
+     *
+     * @param dispatcher the dispatcher
+     * @param metrics    the metrics
+     */
     public MetricsDispatcher(final Dispatcher dispatcher, final Metrics metrics) {
       this.dispatcher = dispatcher;
       this.metrics = metrics;

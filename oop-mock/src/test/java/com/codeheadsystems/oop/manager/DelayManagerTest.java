@@ -32,9 +32,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Delay manager test.
+ */
 @ExtendWith(MockitoExtension.class)
 class DelayManagerTest {
 
+  /**
+   * The constant MILLS.
+   */
   public static final long MILLS = 500L;
   @Mock private SleeperManager sleeperManager;
   @Mock private OopMockConfiguration configuration;
@@ -56,6 +62,15 @@ class DelayManagerTest {
     );
   }
 
+  /**
+   * Delay.
+   *
+   * @param max      the max
+   * @param start    the start
+   * @param delay    the delay
+   * @param end      the end
+   * @param expected the expected
+   */
   @ParameterizedTest
   @MethodSource("delayTestData")
   void delay(final long max, final long start, final long delay, final long end, final long expected) {
@@ -67,6 +82,9 @@ class DelayManagerTest {
     verify(sleeperManager).sleep(expected);
   }
 
+  /**
+   * Delay disabled.
+   */
   @Test
   void delay_disabled() {
     when(configuration.delayResponseEnabled()).thenReturn(false);
@@ -76,6 +94,9 @@ class DelayManagerTest {
     verifyNoInteractions(sleeperManager);
   }
 
+  /**
+   * Start millis.
+   */
   @Test
   void startMillis() {
     delayManager = new DelayManager(configuration, clock, sleeperManager);

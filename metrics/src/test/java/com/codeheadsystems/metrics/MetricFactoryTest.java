@@ -16,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Metric factory test.
+ */
 @ExtendWith(MockitoExtension.class)
 class MetricFactoryTest {
 
@@ -30,6 +33,9 @@ class MetricFactoryTest {
   @Mock private TagsGenerator<Throwable> defaultTagsGeneratorForThrowable;
   @Mock private TagsGeneratorRegistry tagsGeneratorRegistry;
 
+  /**
+   * Test default.
+   */
   @Test
   void testDefault() {
     final MetricFactory metricFactory = MetricFactory.builder().build();
@@ -37,6 +43,11 @@ class MetricFactoryTest {
     assertThat(result).isEqualTo("result");
   }
 
+  /**
+   * Test built.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void testBuilt() throws Exception {
     final MetricFactory metricFactory = MetricFactory.builder()
@@ -50,6 +61,11 @@ class MetricFactoryTest {
     verify(metricPublisher).close();
   }
 
+  /**
+   * Test with.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void testWith() throws Exception {
     final MetricFactory metricFactory = MetricFactory.builder()
@@ -79,6 +95,11 @@ class MetricFactoryTest {
     assertThat(secondResult).isTrue();
   }
 
+  /**
+   * Test with nester default behavior.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void testWithNester_defaultBehavior() throws Exception {
     final MetricFactory metricFactory = MetricFactory.builder()
@@ -87,6 +108,11 @@ class MetricFactoryTest {
     testNestedMetrics(metricFactory, 1);
   }
 
+  /**
+   * Test with nester open close only initial.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void testWithNester_openCloseOnlyInitial() throws Exception {
     final MetricFactory metricFactory = MetricFactory.builder()
@@ -96,6 +122,11 @@ class MetricFactoryTest {
     testNestedMetrics(metricFactory, 1);
   }
 
+  /**
+   * Test with nester open close all.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void testWithNester_openCloseAll() throws Exception {
     final MetricFactory metricFactory = MetricFactory.builder()
@@ -105,6 +136,13 @@ class MetricFactoryTest {
     testNestedMetrics(metricFactory, 2);
   }
 
+  /**
+   * Test nested metrics.
+   *
+   * @param metricFactory the metric factory
+   * @param expectedTimes the expected times
+   * @throws Exception the exception
+   */
   void testNestedMetrics(MetricFactory metricFactory, int expectedTimes) throws Exception {
     metricFactory.with(metrics -> { // outer
       metrics.time("outer", () -> {

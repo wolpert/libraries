@@ -9,6 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Metrics decorator test.
+ */
 @ExtendWith(MockitoExtension.class)
 class MetricsDecoratorTest {
 
@@ -16,6 +19,9 @@ class MetricsDecoratorTest {
 
   @InjectMocks private MetricsDecorator metricsDecorator;
 
+  /**
+   * Test decorate.
+   */
   @Test
   public void testDecorate() {
     FeatureManager.Builder builder = new FeatureManager.Builder();

@@ -21,15 +21,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Time manager test.
+ */
 class TimeManagerTest {
 
   private TimeManager manager;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     manager = new TimeManager();
   }
 
+  /**
+   * Log timed.
+   */
   @Test
   void logTimed() {
     final Boolean result = manager.logTimed(() -> Boolean.TRUE);

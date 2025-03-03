@@ -24,15 +24,24 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Sleeper manager test.
+ */
 class SleeperManagerTest {
 
   private SleeperManager sleeperManager;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   void setup() {
     sleeperManager = new SleeperManager();
   }
 
+  /**
+   * Sleep.
+   */
   @Test
   void sleep() {
     sleeperManager.sleep(0);

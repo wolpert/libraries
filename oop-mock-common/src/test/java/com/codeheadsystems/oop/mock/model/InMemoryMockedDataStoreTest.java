@@ -19,6 +19,9 @@ package com.codeheadsystems.oop.mock.model;
 import com.codeheadsystems.test.model.BaseJacksonTest;
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * The type In memory mocked data store test.
+ */
 class InMemoryMockedDataStoreTest extends BaseJacksonTest<InMemoryMockedDataStore> {
 
   @Override

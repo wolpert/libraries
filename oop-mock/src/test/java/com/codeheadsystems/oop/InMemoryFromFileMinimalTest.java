@@ -29,8 +29,17 @@ import org.junit.jupiter.api.Test;
  */
 public class InMemoryFromFileMinimalTest {
 
+  /**
+   * The constant METHOD_MOCK_NAME.
+   */
   public static final String METHOD_MOCK_NAME = "ATest";
+  /**
+   * The constant ID.
+   */
   public static final String ID = "id";
+  /**
+   * The constant UNSET_ID.
+   */
   public static final String UNSET_ID = "UNSET";
   private static final String FILENAME = "testDataStore.json";
 
@@ -97,25 +106,48 @@ public class InMemoryFromFileMinimalTest {
         .factory());
   }
 
+  /**
+   * The type Throw exception.
+   */
   class ThrowException {
 
     private final TimeManager timeManager;
 
     private final OopMock oopMock;
 
+    /**
+     * Instantiates a new Throw exception.
+     *
+     * @param factory the factory
+     */
     ThrowException(final OopMockFactory factory) {
       oopMock = factory.generate(getClass());
       timeManager = new TimeManager();
     }
 
+    /**
+     * Call mocked boolean.
+     *
+     * @return the boolean
+     */
     public Boolean callMocked() {
       return timeManager.logTimed(() -> oopMock.proxy(Boolean.class, this::doIt, METHOD_MOCK_NAME, ID));
     }
 
+    /**
+     * Do it boolean.
+     *
+     * @return the boolean
+     */
     public boolean doIt() {
       throw new IllegalStateException("boom");
     }
 
+    /**
+     * Call not mocked boolean.
+     *
+     * @return the boolean
+     */
     public Boolean callNotMocked() {
       return timeManager.logTimed(() -> oopMock.proxy(Boolean.class, this::doIt, METHOD_MOCK_NAME, UNSET_ID));
     }

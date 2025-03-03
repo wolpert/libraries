@@ -33,6 +33,9 @@ public abstract class BaseMetricTest {
    */
   protected Metrics metrics;
 
+  /**
+   * The Metrics factory.
+   */
   protected MetricFactory metricsFactory;
 
   /**

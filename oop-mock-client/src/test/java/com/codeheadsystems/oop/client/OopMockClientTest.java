@@ -29,6 +29,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Oop mock client test.
+ */
 @ExtendWith(MockitoExtension.class)
 class OopMockClientTest {
 
@@ -45,12 +48,18 @@ class OopMockClientTest {
 
   private OopMockClient client;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     when(hasher.namespace(CLAZZ)).thenReturn(NAMESPACE);
     client = new OopMockClient(CLAZZ, hasher, dao, translator);
   }
 
+  /**
+   * Mock setup.
+   */
   @Test
   public void mockSetup() {
     when(translator.marshal(DATA)).thenReturn(mockedData);
@@ -60,6 +69,9 @@ class OopMockClientTest {
     verify(dao).store(NAMESPACE, LOOKUP, ID, mockedData);
   }
 
+  /**
+   * Delete mock.
+   */
   @Test
   public void deleteMock() {
     client.deleteMock(LOOKUP, ID);

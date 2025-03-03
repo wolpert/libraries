@@ -28,6 +28,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Oop mock factory test.
+ */
 @ExtendWith(MockitoExtension.class)
 class OopMockFactoryTest {
 
@@ -38,6 +41,9 @@ class OopMockFactoryTest {
 
   private OopMockFactory oopMockFactory;
 
+  /**
+   * Generate disabled.
+   */
   @Test
   void generate_disabled() {
     when(oopMockConfiguration.enabled()).thenReturn(false);
@@ -47,6 +53,9 @@ class OopMockFactoryTest {
         .isEqualTo(passThroughOopMoc);
   }
 
+  /**
+   * Generate enabled.
+   */
   @Test
   void generate_enabled() {
     when(oopMockConfiguration.enabled()).thenReturn(true);
@@ -57,6 +66,9 @@ class OopMockFactoryTest {
         .isEqualTo(oopMock);
   }
 
+  /**
+   * Generate instance.
+   */
   @Test
   void generate_instance() {
     oopMockFactory = OopMockFactoryBuilder.generate();

@@ -14,6 +14,7 @@ public class SampleObject {
   /**
    * Metrics factory metric factory.
    *
+   * @param metricPublisher the metric publisher
    * @return the metric factory
    */
   @DeclarativeFactory
@@ -24,6 +25,9 @@ public class SampleObject {
   }
 
 
+  /**
+   * Method without metrics.
+   */
   public void methodWithoutMetrics() {
 
   }
@@ -46,16 +50,37 @@ public class SampleObject {
     return true;
   }
 
+  /**
+   * Method with metrics and tags with defined exception boolean.
+   *
+   * @param name  the name
+   * @param other the other
+   * @return the boolean
+   * @throws IOException the io exception
+   */
   @Metrics
   public boolean methodWithMetricsAndTagsWithDefinedException(@Tag("anotherName") String name, String other) throws IOException {
     return true;
   }
 
+  /**
+   * Method with metrics and tags with thrown exception boolean.
+   *
+   * @param name  the name
+   * @param other the other
+   * @return the boolean
+   * @throws IOException the io exception
+   */
   @Metrics
   public boolean methodWithMetricsAndTagsWithThrownException(@Tag("name") String name, @Tag("thing") String other) throws IOException {
     throw new IOException();
   }
 
+  /**
+   * Method with metrics and tags and thrown runtime exception.
+   *
+   * @param name the name
+   */
   @Metrics
   public void methodWithMetricsAndTagsAndThrownRuntimeException(@Tag("notname") String name) {
     throw new IllegalStateException();

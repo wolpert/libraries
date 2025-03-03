@@ -30,6 +30,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Etcd enablement lookup manager test.
+ */
 @ExtendWith(MockitoExtension.class)
 class EtcdEnablementLookupManagerTest {
 
@@ -56,11 +59,21 @@ class EtcdEnablementLookupManagerTest {
   }
 
 
+  /**
+   * Sets up.
+   */
   @BeforeEach
   void setUp() {
     etcdFeatureLookupManager = new EtcdFeatureLookupManager(client, PREAMBLE);
   }
 
+  /**
+   * Lookup percentage found.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   * @throws TimeoutException     the timeout exception
+   */
   @Test
   void lookupPercentage_found() throws ExecutionException, InterruptedException, TimeoutException {
     when(client.getKVClient()).thenReturn(kv);
@@ -74,6 +87,13 @@ class EtcdEnablementLookupManagerTest {
         .contains(0.5);
   }
 
+  /**
+   * Lookup percentage not found.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   * @throws TimeoutException     the timeout exception
+   */
   @Test
   void lookupPercentage_notFound() throws ExecutionException, InterruptedException, TimeoutException {
     when(client.getKVClient()).thenReturn(kv);
@@ -85,6 +105,13 @@ class EtcdEnablementLookupManagerTest {
         .isEmpty();
   }
 
+  /**
+   * Lookup percentage interrupted.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   * @throws TimeoutException     the timeout exception
+   */
   @Test
   void lookupPercentage_interrupted() throws ExecutionException, InterruptedException, TimeoutException {
     when(client.getKVClient()).thenReturn(kv);
@@ -94,6 +121,13 @@ class EtcdEnablementLookupManagerTest {
         .isThrownBy(() -> etcdFeatureLookupManager.lookupPercentage(FEATURE_ID));
   }
 
+  /**
+   * Lookup percentage execution exception.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   * @throws TimeoutException     the timeout exception
+   */
   @Test
   void lookupPercentage_executionException() throws ExecutionException, InterruptedException, TimeoutException {
     when(client.getKVClient()).thenReturn(kv);
@@ -103,6 +137,12 @@ class EtcdEnablementLookupManagerTest {
         .isThrownBy(() -> etcdFeatureLookupManager.lookupPercentage(FEATURE_ID));
   }
 
+  /**
+   * Sets percentage.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   */
   @Test
   void setPercentage() throws ExecutionException, InterruptedException {
     when(client.getKVClient()).thenReturn(kv);
@@ -114,6 +154,12 @@ class EtcdEnablementLookupManagerTest {
     verify(putResponseCompletableFuture).get();
   }
 
+  /**
+   * Sets percentage interrupted.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   */
   @Test
   void setPercentage_interrupted() throws ExecutionException, InterruptedException {
     when(client.getKVClient()).thenReturn(kv);
@@ -123,6 +169,12 @@ class EtcdEnablementLookupManagerTest {
         .isThrownBy(() -> etcdFeatureLookupManager.setPercentage(FEATURE_ID, 0.5));
   }
 
+  /**
+   * Sets percentage execution exception.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   */
   @Test
   void setPercentage_executionException() throws ExecutionException, InterruptedException {
     when(client.getKVClient()).thenReturn(kv);
@@ -132,6 +184,12 @@ class EtcdEnablementLookupManagerTest {
         .isThrownBy(() -> etcdFeatureLookupManager.setPercentage(FEATURE_ID, 0.5));
   }
 
+  /**
+   * Delete percentage.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   */
   @Test
   void deletePercentage() throws ExecutionException, InterruptedException {
     when(client.getKVClient()).thenReturn(kv);
@@ -142,6 +200,12 @@ class EtcdEnablementLookupManagerTest {
     assertThat(values).containsExactly(PREAMBLE + "_" + NAMESPACE + "/" + FEATURE_ID);
   }
 
+  /**
+   * Delete percentage interrupted.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   */
   @Test
   void deletePercentage_interrupted() throws ExecutionException, InterruptedException {
     when(client.getKVClient()).thenReturn(kv);
@@ -151,6 +215,12 @@ class EtcdEnablementLookupManagerTest {
         .isThrownBy(() -> etcdFeatureLookupManager.deletePercentage(FEATURE_ID));
   }
 
+  /**
+   * Delete percentage execution exception.
+   *
+   * @throws ExecutionException   the execution exception
+   * @throws InterruptedException the interrupted exception
+   */
   @Test
   void deletePercentage_executionException() throws ExecutionException, InterruptedException {
     when(client.getKVClient()).thenReturn(kv);

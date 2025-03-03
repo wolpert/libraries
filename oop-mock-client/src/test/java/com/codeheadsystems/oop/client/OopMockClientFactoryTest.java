@@ -26,6 +26,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Oop mock client factory test.
+ */
 @ExtendWith(MockitoExtension.class)
 class OopMockClientFactoryTest {
 
@@ -34,11 +37,17 @@ class OopMockClientFactoryTest {
 
   private OopMockClientFactory factory;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   void setup() {
     factory = new OopMockClientFactory(assistedFactory);
   }
 
+  /**
+   * Generate.
+   */
   @Test
   void generate() {
     when(assistedFactory.create(Object.class)).thenReturn(client);

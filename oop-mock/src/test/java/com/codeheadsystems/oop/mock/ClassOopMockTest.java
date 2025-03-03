@@ -27,6 +27,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Class oop mock test.
+ */
 @ExtendWith(MockitoExtension.class)
 class ClassOopMockTest {
 
@@ -42,12 +45,18 @@ class ClassOopMockTest {
 
   private ClassOopMock classOopMock;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     when(hasher.namespace(CLAZZ)).thenReturn(NAMESPACE);
     classOopMock = new ClassOopMock(CLAZZ, hasher, proxyManager);
   }
 
+  /**
+   * Proxy.
+   */
   @Test
   void proxy() {
     final Supplier<String> supplier = () -> REAL_RESPONSE;
@@ -59,6 +68,9 @@ class ClassOopMockTest {
         .isEqualTo(MOCK_RESPONSE);
   }
 
+  /**
+   * Test to string.
+   */
   @Test
   void testToString() {
     assertThat(classOopMock.toString())

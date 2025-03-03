@@ -14,6 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Enablement manager test.
+ */
 @ExtendWith(MockitoExtension.class)
 class EnablementManagerTest {
 
@@ -25,6 +28,9 @@ class EnablementManagerTest {
 
   private FeatureManager featureManager;
 
+  /**
+   * Sets up feature manager.
+   */
   @BeforeEach
   void setUpFeatureManager() {
     featureManager = new FeatureManager.Builder()
@@ -33,6 +39,9 @@ class EnablementManagerTest {
         .build();
   }
 
+  /**
+   * Is enabled.
+   */
   @Test
   void isEnabled() {
     when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenReturn(Optional.of(0.5));
@@ -41,6 +50,9 @@ class EnablementManagerTest {
     assertThat(featureManager.isEnabled(FEATURE_ID, DISCRIMINATOR)).isTrue();
   }
 
+  /**
+   * Is enabled no feature.
+   */
   @Test
   void isEnabled_noFeature() {
     when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenReturn(Optional.empty());
@@ -49,6 +61,9 @@ class EnablementManagerTest {
     assertThat(featureManager.isEnabled(FEATURE_ID, DISCRIMINATOR)).isFalse();
   }
 
+  /**
+   * Is enabled error thrown.
+   */
   @Test
   void isEnabled_errorThrown() {
     when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenThrow(new RuntimeException("error"));
@@ -56,6 +71,9 @@ class EnablementManagerTest {
     assertThat(featureManager.isEnabled(FEATURE_ID, DISCRIMINATOR)).isFalse();
   }
 
+  /**
+   * If enabled else enabled.
+   */
   @Test
   void ifEnabledElse_enabled() {
     when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenReturn(Optional.of(0.5));
@@ -65,6 +83,9 @@ class EnablementManagerTest {
         .isEqualTo("enabled");
   }
 
+  /**
+   * If enabled else disabled.
+   */
   @Test
   void ifEnabledElse_disabled() {
     when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenReturn(Optional.empty());
@@ -74,6 +95,9 @@ class EnablementManagerTest {
         .isEqualTo("disabled");
   }
 
+  /**
+   * Invalidate.
+   */
   @Test
   void invalidate() {
     when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenReturn(Optional.empty()).thenReturn(Optional.of(0.5));
@@ -88,6 +112,9 @@ class EnablementManagerTest {
     verify(featureLookupManager, times(2)).lookupPercentage(FEATURE_ID);
   }
 
+  /**
+   * Invalidate not called.
+   */
   @Test
   void invalidate_notCalled() {
     lenient().when(featureLookupManager.lookupPercentage(FEATURE_ID)).thenReturn(Optional.empty()).thenReturn(Optional.of(0.5));

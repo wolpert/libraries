@@ -30,6 +30,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Json converter test.
+ */
 @ExtendWith(MockitoExtension.class)
 class JsonConverterTest {
 
@@ -41,11 +44,19 @@ class JsonConverterTest {
 
   private JsonConverter converter;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   void setup() {
     converter = new JsonConverter(mapper);
   }
 
+  /**
+   * To json success.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   void toJson_success() throws JsonProcessingException {
     when(mapper.writeValueAsString(RESULT))
@@ -57,6 +68,11 @@ class JsonConverterTest {
   }
 
 
+  /**
+   * To json fail.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   void toJson_fail() throws JsonProcessingException {
     when(mapper.writeValueAsString(RESULT))
@@ -66,6 +82,11 @@ class JsonConverterTest {
         .isThrownBy(() -> converter.toJson(RESULT));
   }
 
+  /**
+   * Convert string success.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   void convert_string_success() throws JsonProcessingException {
     when(mapper.readValue(JSON, Object.class)).thenReturn(RESULT);
@@ -75,6 +96,11 @@ class JsonConverterTest {
         .isEqualTo(RESULT);
   }
 
+  /**
+   * Convert string ioexception.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   void convert_string_ioexception() throws JsonProcessingException {
     when(mapper.readValue(JSON, Object.class)).thenThrow(new OurException());
@@ -83,6 +109,11 @@ class JsonConverterTest {
         .isThrownBy(() -> converter.convert(JSON, Object.class));
   }
 
+  /**
+   * Convert inputstream success.
+   *
+   * @throws IOException the io exception
+   */
   @Test
   void convert_inputstream_success() throws IOException {
     when(mapper.readValue(inputStream, Object.class)).thenReturn(RESULT);
@@ -92,6 +123,11 @@ class JsonConverterTest {
         .isEqualTo(RESULT);
   }
 
+  /**
+   * Convert inputstream ioexception.
+   *
+   * @throws IOException the io exception
+   */
   @Test
   void convert_inputstream_ioexception() throws IOException {
     when(mapper.readValue(inputStream, Object.class)).thenThrow(new IOException());
@@ -100,8 +136,14 @@ class JsonConverterTest {
         .isThrownBy(() -> converter.convert(inputStream, Object.class));
   }
 
+  /**
+   * The type Our exception.
+   */
   class OurException extends JsonProcessingException {
 
+    /**
+     * Instantiates a new Our exception.
+     */
     protected OurException() {
       super("boom");
     }

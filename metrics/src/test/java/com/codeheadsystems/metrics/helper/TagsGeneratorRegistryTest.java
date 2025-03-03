@@ -7,6 +7,9 @@ import com.codeheadsystems.metrics.TagsGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Tags generator registry test.
+ */
 class TagsGeneratorRegistryTest {
 
   private static final Tags INTEGER_TAGS = Tags.of("integer", "1");
@@ -17,6 +20,9 @@ class TagsGeneratorRegistryTest {
 
   private TagsGeneratorRegistry tagsGeneratorRegistry;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     tagsGeneratorRegistry = new TagsGeneratorRegistry();
@@ -24,18 +30,27 @@ class TagsGeneratorRegistryTest {
     tagsGeneratorRegistry.register(Float.class, FLOAT_TAGS_GENERATOR);
   }
 
+  /**
+   * Test get.
+   */
   @Test
   public void testGet() {
     assertThat(tagsGeneratorRegistry.get(Integer.class).from(1)).isEqualTo(INTEGER_TAGS);
     assertThat(tagsGeneratorRegistry.get(Float.class).from(1.0f)).isEqualTo(FLOAT_TAGS);
   }
 
+  /**
+   * Test deregister.
+   */
   @Test
   public void testDeregister() {
     tagsGeneratorRegistry.deregister(Integer.class);
     assertThat(tagsGeneratorRegistry.get(Integer.class)).isNull();
   }
 
+  /**
+   * Test get registered classes.
+   */
   @Test
   public void testGetRegisteredClasses() {
     assertThat(tagsGeneratorRegistry.getRegisteredClasses()).containsExactlyInAnyOrder(Integer.class, Float.class);

@@ -49,6 +49,7 @@ public class MetricsImpl implements AutoCloseable, Metrics {
    * @param metricPublisher                  the metric implementation.
    * @param defaultTagsGeneratorForThrowable to use for exceptions, optional.
    * @param tagsGeneratorRegistry            to help with tags.
+   * @param tags                             the tags
    * @param name                             function to convert a name to a metric name.
    */
   public MetricsImpl(final Clock clock,

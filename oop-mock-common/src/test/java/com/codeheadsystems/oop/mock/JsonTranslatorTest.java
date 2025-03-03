@@ -28,6 +28,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Json translator test.
+ */
 @ExtendWith(MockitoExtension.class)
 class JsonTranslatorTest {
 
@@ -39,11 +42,17 @@ class JsonTranslatorTest {
 
   private JsonTranslator translator;
 
+  /**
+   * Sets up.
+   */
   @BeforeEach
   void setUp() {
     translator = new JsonTranslator(converter);
   }
 
+  /**
+   * Unmarshal.
+   */
   @Test
   void unmarshal() {
     when(mockedData.marshalledData()).thenReturn(MARSHALLED);
@@ -55,6 +64,9 @@ class JsonTranslatorTest {
         .isEqualTo(REAL_DATA);
   }
 
+  /**
+   * Marshal.
+   */
   @Test
   void marshal() {
     when(converter.toJson(REAL_DATA))

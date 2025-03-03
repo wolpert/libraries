@@ -24,6 +24,13 @@ public class StateMachine extends Context.Impl {
   private final Dispatcher dispatcher;
   private final boolean useExceptions;
 
+  /**
+   * Instantiates a new State machine.
+   *
+   * @param definition    the definition
+   * @param dispatcher    the dispatcher
+   * @param useExceptions the use exceptions
+   */
   StateMachine(final StateMachineDefinition definition,
                final Dispatcher dispatcher,
                final boolean useExceptions) {
@@ -34,6 +41,11 @@ public class StateMachine extends Context.Impl {
     this.useExceptions = useExceptions;
   }
 
+  /**
+   * Builder state machine . builder.
+   *
+   * @return the state machine . builder
+   */
   public static StateMachine.Builder builder() {
     return new StateMachine.Builder();
   }
@@ -75,6 +87,13 @@ public class StateMachine extends Context.Impl {
     return definition.events(state);
   }
 
+  /**
+   * Enable.
+   *
+   * @param state           the state
+   * @param phase           the phase
+   * @param contextConsumer the context consumer
+   */
   public void enable(final State state,
                      final Phase phase,
                      final Consumer<Callback> contextConsumer) {
@@ -85,6 +104,13 @@ public class StateMachine extends Context.Impl {
     }
   }
 
+  /**
+   * Disable.
+   *
+   * @param state           the state
+   * @param phase           the phase
+   * @param contextConsumer the context consumer
+   */
   public void disable(final State state,
                       final Phase phase,
                       final Consumer<Callback> contextConsumer) {
@@ -132,6 +158,9 @@ public class StateMachine extends Context.Impl {
     return t;
   }
 
+  /**
+   * The type Builder.
+   */
   public static class Builder {
 
     private final List<Decorator<Dispatcher>> dispatcherDecorators;
@@ -139,31 +168,63 @@ public class StateMachine extends Context.Impl {
     private Dispatcher dispatcher;
     private boolean useExceptions;
 
+    /**
+     * Instantiates a new Builder.
+     */
     public Builder() {
       this.useExceptions = false;
       this.dispatcherDecorators = new ArrayList<>();
     }
 
+    /**
+     * With state machine definition builder.
+     *
+     * @param stateMachineDefinition the state machine definition
+     * @return the builder
+     */
     public Builder withStateMachineDefinition(final StateMachineDefinition stateMachineDefinition) {
       this.stateMachineDefinition = stateMachineDefinition;
       return this;
     }
 
+    /**
+     * With dispatcher decorator builder.
+     *
+     * @param decorator the decorator
+     * @return the builder
+     */
     public Builder withDispatcherDecorator(final Decorator<Dispatcher> decorator) {
       dispatcherDecorators.add(decorator);
       return this;
     }
 
+    /**
+     * With dispatcher builder.
+     *
+     * @param dispatcher the dispatcher
+     * @return the builder
+     */
     public Builder withDispatcher(final Dispatcher dispatcher) {
       this.dispatcher = dispatcher;
       return this;
     }
 
+    /**
+     * With use exceptions builder.
+     *
+     * @param useExceptions the use exceptions
+     * @return the builder
+     */
     public Builder withUseExceptions(final boolean useExceptions) {
       this.useExceptions = useExceptions;
       return this;
     }
 
+    /**
+     * Build state machine.
+     *
+     * @return the state machine
+     */
     public StateMachine build() {
       if (stateMachineDefinition == null) {
         throw new StateMachineException("StateMachineDefinition is required.");

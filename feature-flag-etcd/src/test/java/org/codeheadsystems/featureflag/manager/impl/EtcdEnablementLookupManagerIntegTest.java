@@ -11,17 +11,26 @@ import org.junit.jupiter.api.extension.RegisterExtension;
  * A longer test that starts up an etcd process. But not really that long.
  */
 public class EtcdEnablementLookupManagerIntegTest extends FeatureLookupManagerIntegTest {
+  /**
+   * The constant cluster.
+   */
   @RegisterExtension
   public static final EtcdClusterExtension cluster = EtcdClusterExtension.builder()
       .withNodes(1)
       .build();
   private Client client;
 
+  /**
+   * Sets client.
+   */
   @BeforeEach
   void setupClient() {
     client = Client.builder().endpoints(cluster.clientEndpoints()).build();
   }
 
+  /**
+   * Tear down client.
+   */
   @AfterEach
   void tearDownClient() {
     client.close();

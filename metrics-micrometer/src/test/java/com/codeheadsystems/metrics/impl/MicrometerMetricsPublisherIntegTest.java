@@ -22,6 +22,11 @@ import org.junit.jupiter.api.Test;
  */
 public class MicrometerMetricsPublisherIntegTest {
 
+  /**
+   * Test full trip.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void testFullTrip() throws Exception {
     final MetricRegistry metrics = new MetricRegistry();
@@ -36,12 +41,29 @@ public class MicrometerMetricsPublisherIntegTest {
     assertThat(reporter.meters).containsKey("test.a.1");
   }
 
+  /**
+   * The type Test reporter.
+   */
   static class TestReporter extends ScheduledReporter {
 
+    /**
+     * The Counters.
+     */
     SortedMap<String, Counter> counters;
+    /**
+     * The Timers.
+     */
     SortedMap<String, Timer> timers;
+    /**
+     * The Meters.
+     */
     SortedMap<String, Meter> meters;
 
+    /**
+     * Instantiates a new Test reporter.
+     *
+     * @param registry the registry
+     */
     protected TestReporter(final MetricRegistry registry) {
       super(registry, "test-reporter", MetricFilter.ALL, TimeUnit.SECONDS, TimeUnit.MILLISECONDS);
     }

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type State machine test.
+ */
 class StateMachineTest extends TestBase {
 
 
@@ -20,12 +23,18 @@ class StateMachineTest extends TestBase {
         .build();
   }
 
+  /**
+   * Initial state.
+   */
   @Test
   void initialState() {
     StateMachine stateMachine = setUpStateMachine(false);
     assertThat(stateMachine.state()).isEqualTo(ONE);
   }
 
+  /**
+   * Transition.
+   */
   @Test
   void transition() {
     StateMachine stateMachine = setUpStateMachine(false);
@@ -39,6 +48,9 @@ class StateMachineTest extends TestBase {
     assertThat(stateMachine.state()).isEqualTo(ONE);
   }
 
+  /**
+   * Transition cannot skip two.
+   */
   @Test
   void transition_cannotSkipTwo() {
     StateMachine stateMachine = setUpStateMachine(false);
@@ -49,6 +61,9 @@ class StateMachineTest extends TestBase {
     assertThat(stateMachine.state()).isEqualTo(TWO);
   }
 
+  /**
+   * Transition cannot skip two with exception.
+   */
   @Test
   void transition_cannotSkipTwo_withException() {
     StateMachine stateMachine = setUpStateMachine(true);
@@ -60,6 +75,9 @@ class StateMachineTest extends TestBase {
     assertThat(stateMachine.state()).isEqualTo(TWO);
   }
 
+  /**
+   * Transitions fails to unknown event.
+   */
   @Test
   void transitionsFailsToUnknownEvent() {
     StateMachine stateMachine = setUpStateMachine(true);
@@ -69,6 +87,9 @@ class StateMachineTest extends TestBase {
     assertThat(stateMachine.state()).isEqualTo(ONE);
   }
 
+  /**
+   * Transition with callbacks.
+   */
   @Test
   void transition_withCallbacks() {
     StateMachine stateMachine = setUpStateMachine(false);
@@ -92,6 +113,9 @@ class StateMachineTest extends TestBase {
     );
   }
 
+  /**
+   * Ticks.
+   */
   @Test
   void ticks() {
     StateMachine stateMachine = setUpStateMachine(false);
@@ -104,6 +128,9 @@ class StateMachineTest extends TestBase {
     assertThat(capture.contexts).containsExactly(expected, expected);
   }
 
+  /**
+   * Ticks with decorator.
+   */
   @Test
   void ticks_withDecorator() {
     StateMachine stateMachine = setUpStateMachine(false, new TestDecorator(0), new TestDecorator(1));
@@ -117,11 +144,19 @@ class StateMachineTest extends TestBase {
     assertThat(TestDecorator.ordering()).isEqualTo("1010"); // last decorator is hit first.
   }
 
+  /**
+   * The type Test decorator.
+   */
   static class TestDecorator implements Decorator<Dispatcher>, Dispatcher {
     private static StringBuilder ordering = new StringBuilder();
     private final int myCount;
     private Dispatcher original;
 
+    /**
+     * Instantiates a new Test decorator.
+     *
+     * @param myCount the my count
+     */
     TestDecorator(int myCount) {
       this.myCount = myCount;
     }
@@ -132,6 +167,11 @@ class StateMachineTest extends TestBase {
       return this;
     }
 
+    /**
+     * Ordering string.
+     *
+     * @return the string
+     */
     public static String ordering() {
       return ordering.toString();
     }
@@ -168,10 +208,21 @@ class StateMachineTest extends TestBase {
     }
   }
 
+  /**
+   * The type Capture.
+   */
   static class Capture {
 
+    /**
+     * The Contexts.
+     */
     ArrayList<Callback> contexts = new ArrayList<>();
 
+    /**
+     * Capture.
+     *
+     * @param context the context
+     */
     public void capture(Callback context) {
       contexts.add(context);
     }

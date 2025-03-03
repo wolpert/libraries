@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Tags test.
+ */
 class TagsTest {
 
   private static final String[] DEFAULT_ARRAY = new String[]{"a", "1", "b", "2"};
@@ -15,30 +18,45 @@ class TagsTest {
 
   private static final Map<String, String> COMBINED_MAP = Map.of("a", "1", "b", "3", "c", "4");
 
+  /**
+   * Test tags array.
+   */
   @Test
   void testTagsArray() {
     Tags tags = new Tags(DEFAULT_ARRAY);
     assertThat(tags.getTags()).isEqualTo(DEFAULT_MAP);
   }
 
+  /**
+   * Test tags map.
+   */
   @Test
   void testTagsMap() {
     Tags tags = new Tags(DEFAULT_MAP);
     assertThat(tags.getTags()).isEqualTo(DEFAULT_MAP);
   }
 
+  /**
+   * Test of.
+   */
   @Test
   void testOf() {
     Tags tags = Tags.of(DEFAULT_ARRAY);
     assertThat(tags.getTags()).isEqualTo(DEFAULT_MAP);
   }
 
+  /**
+   * Empty.
+   */
   @Test
   void empty() {
     Tags tags = Tags.empty();
     assertThat(tags.getTags()).isEmpty();
   }
 
+  /**
+   * Test add.
+   */
   @Test
   void testAdd() {
     Tags tags = new Tags(DEFAULT_ARRAY);
@@ -46,6 +64,9 @@ class TagsTest {
     assertThat(tags.getTags()).isEqualTo(COMBINED_MAP);
   }
 
+  /**
+   * Test from.
+   */
   @Test
   void testFrom() {
     Tags tags = new Tags(DEFAULT_ARRAY);

@@ -35,12 +35,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type In memory resolver test.
+ */
 @ExtendWith(MockitoExtension.class)
 class InMemoryResolverTest {
 
+  /**
+   * The constant NAMESPACE.
+   */
   public static final String NAMESPACE = "namespace";
+  /**
+   * The constant LOOKUP.
+   */
   public static final String LOOKUP = "lookup";
+  /**
+   * The constant DISCRIMINATOR.
+   */
   public static final String DISCRIMINATOR = "discriminator";
+  /**
+   * The constant MARSHALLED_DATA.
+   */
   public static final String MARSHALLED_DATA = "marshaled";
   private static final String FILENAME = "filename";
   private static final Hasher HASHER = new Hasher("blah");
@@ -56,6 +71,9 @@ class InMemoryResolverTest {
 
   private InMemoryResolver resolver;
 
+  /**
+   * Sets up.
+   */
   @BeforeEach
   void setUp() {
     when(configuration.mockDataFileName()).thenReturn(Optional.of(FILENAME));
@@ -64,18 +82,27 @@ class InMemoryResolverTest {
     resolver = new InMemoryResolver(configuration, converter, manager, HASHER);
   }
 
+  /**
+   * Resolve nonamespace.
+   */
   @Test
   void resolve_nonamespace() {
     assertThat(resolver.resolve(NAMESPACE + "not here", LOOKUP, DISCRIMINATOR))
         .isEmpty();
   }
 
+  /**
+   * Resolve nodiscriminator.
+   */
   @Test
   void resolve_nodiscriminator() {
     assertThat(resolver.resolve(NAMESPACE, LOOKUP, DISCRIMINATOR + "not here"))
         .isEmpty();
   }
 
+  /**
+   * Resolve.
+   */
   @Test
   void resolve() {
     assertThat(resolver.resolve(NAMESPACE, LOOKUP, DISCRIMINATOR))

@@ -72,7 +72,7 @@ public class Tags {
    * Adds the tags into this tags. Changes this object.
    *
    * @param tags to add.
-   * @return this.
+   * @return this. tags
    */
   public Tags add(final String... tags) {
     if (tags.length % 2 != 0) {
@@ -88,7 +88,7 @@ public class Tags {
    * Adds the tags into this tags. Changes this object.
    *
    * @param tags to add.
-   * @return this.
+   * @return this. tags
    */
   public Tags add(final Tags tags) {
     this.tags.putAll(tags.getTags());
@@ -116,6 +116,11 @@ public class Tags {
   }
 
 
+  /**
+   * Gets tags.
+   *
+   * @return the tags
+   */
   public Map<String, String> getTags() {
     return tags;
   }

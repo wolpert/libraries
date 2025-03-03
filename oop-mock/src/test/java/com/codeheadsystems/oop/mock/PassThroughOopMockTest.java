@@ -21,15 +21,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The type Pass through oop mock test.
+ */
 class PassThroughOopMockTest {
 
   private PassThroughOopMock passThroughOopMock;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     passThroughOopMock = new PassThroughOopMock();
   }
 
+  /**
+   * Proxy.
+   */
   @Test
   void proxy() {
     final String str = "not a test";
@@ -39,6 +48,9 @@ class PassThroughOopMockTest {
         .isEqualTo(str);
   }
 
+  /**
+   * Test to string.
+   */
   @Test
   void testToString() {
     assertThat(passThroughOopMock.toString())

@@ -17,6 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Metrics impl test.
+ */
 @ExtendWith(MockitoExtension.class)
 class MetricsImplTest {
 
@@ -38,6 +41,9 @@ class MetricsImplTest {
 
   private MetricsImpl metricsImpl;
 
+  /**
+   * Sets up.
+   */
   @BeforeEach
   void setUp() {
     metricsImpl = new MetricsImpl(
@@ -48,6 +54,9 @@ class MetricsImplTest {
         DEFAULT_TAGS, metricsName);
   }
 
+  /**
+   * Test and.
+   */
   @Test
   void testAnd() {
     metricsImpl.and(OVERRIDE_TAGS);
@@ -55,6 +64,11 @@ class MetricsImplTest {
         .isEqualTo(COMBINED_TAGS);
   }
 
+  /**
+   * Close.
+   *
+   * @throws Exception the exception
+   */
   @Test
   void close() throws Exception {
     metricsImpl.and(OVERRIDE_TAGS);
@@ -64,6 +78,9 @@ class MetricsImplTest {
     verify(metricPublisher).close();
   }
 
+  /**
+   * Add array.
+   */
   @Test
   void addArray() {
     metricsImpl.and(OVERRIDE_ARRAY);
@@ -71,6 +88,9 @@ class MetricsImplTest {
         .isEqualTo(COMBINED_TAGS);
   }
 
+  /**
+   * Test increment.
+   */
   @Test
   void testIncrement() {
     metricsImpl.increment(METRIC_NAME, 1L, OVERRIDE_ARRAY);
@@ -80,6 +100,9 @@ class MetricsImplTest {
         .isEqualTo(DEFAULT_TAGS);
   }
 
+  /**
+   * Test publish time.
+   */
   @Test
   void testPublishTime() {
     metricsImpl.publishTime(METRIC_NAME, Duration.ofMillis(100), COMBINED_TAGS);
@@ -87,6 +110,9 @@ class MetricsImplTest {
         .time(METRIC_NAME, Duration.ofMillis(100), COMBINED_TAGS);
   }
 
+  /**
+   * Time base.
+   */
   @Test
   void time_base() {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -97,6 +123,9 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base hardcoded method.
+   */
   @Test
   void time_base_hardcodedMethod() {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -107,6 +136,9 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time manual tags.
+   */
   @Test
   void time_manualTags() {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -117,6 +149,9 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time more manual tags.
+   */
   @Test
   void time_moreManualTags() {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -127,6 +162,11 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base exception.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseException() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -137,6 +177,11 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base with exception.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseWithException() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -147,6 +192,11 @@ class MetricsImplTest {
         .time(METRIC_NAME, Duration.ofMillis(100), DEFAULT_TAGS);
   }
 
+  /**
+   * Time base with exception default handler.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseWithException_defaultHandler() throws SomeException {
     metricsImpl = new MetricsImpl(clock, metricPublisher, TAGS_GENERATOR_ERROR, null, DEFAULT_TAGS, metricsName);
@@ -158,6 +208,9 @@ class MetricsImplTest {
         .time(METRIC_NAME, Duration.ofMillis(100), DEFAULT_TAGS.from(ERROR_TAGS));
   }
 
+  /**
+   * Time with tags.
+   */
   @Test
   void time_withTags() {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -168,6 +221,9 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time with tags changed in method.
+   */
   @Test
   void time_withTags_changedInMethod() {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -179,6 +235,11 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base exception with tags.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseException_withTags() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -189,6 +250,11 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base with exception with tags.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseWithException_withTags() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -199,6 +265,11 @@ class MetricsImplTest {
         .time(METRIC_NAME, Duration.ofMillis(100), COMBINED_TAGS);
   }
 
+  /**
+   * Time base exception with tag generator.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseException_withTagGenerator() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -209,6 +280,11 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base with exception with generator.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseWithException_withGenerator() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -219,6 +295,11 @@ class MetricsImplTest {
         .time(METRIC_NAME, Duration.ofMillis(100), DEFAULT_TAGS.from(ERROR_TAGS));
   }
 
+  /**
+   * Time base exception with tag generator and override tags.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseException_withTagGenerator_andOverrideTags() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -229,6 +310,11 @@ class MetricsImplTest {
     assertThat(result).isEqualTo(RESULT);
   }
 
+  /**
+   * Time base with exception with generator and override tags.
+   *
+   * @throws SomeException the some exception
+   */
   @Test
   void time_baseWithException_withGenerator_andOverrideTags() throws SomeException {
     when(clock.millis()).thenReturn(200L).thenReturn(300L);
@@ -239,25 +325,55 @@ class MetricsImplTest {
         .time(METRIC_NAME, Duration.ofMillis(100), COMBINED_TAGS.from(ERROR_TAGS));
   }
 
+  /**
+   * Test method object.
+   *
+   * @return the object
+   */
   Object testMethod() {
     return RESULT;
   }
 
+  /**
+   * Test method with tags object.
+   *
+   * @param tags    the tags
+   * @param newTags the new tags
+   * @return the object
+   */
   Object testMethodWithTags(Tags tags, String... newTags) {
     tags.add(newTags);
     return RESULT;
   }
 
+  /**
+   * Test method with exception thrown object.
+   *
+   * @return the object
+   * @throws SomeException the some exception
+   */
   Object testMethodWithExceptionThrown() throws SomeException {
     throw new SomeException();
   }
 
+  /**
+   * Test method with exception defined object.
+   *
+   * @return the object
+   * @throws SomeException the some exception
+   */
   Object testMethodWithExceptionDefined() throws SomeException {
     return RESULT;
   }
 
 
+  /**
+   * The type Some exception.
+   */
   static class SomeException extends Exception {
+    /**
+     * Instantiates a new Some exception.
+     */
     public SomeException() {
       super("oops");
     }

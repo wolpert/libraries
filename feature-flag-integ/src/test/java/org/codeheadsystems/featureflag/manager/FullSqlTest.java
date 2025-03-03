@@ -76,6 +76,9 @@ public class FullSqlTest {
         .build();
   }
 
+  /**
+   * Temporary test.
+   */
   @Test
   void temporaryTest() {
     // This is a temporary test

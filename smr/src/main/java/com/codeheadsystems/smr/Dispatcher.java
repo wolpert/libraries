@@ -7,10 +7,24 @@ import java.util.function.Consumer;
  * It is customizable so we allow for multiple callbacks.
  */
 public interface Dispatcher {
+  /**
+   * Enable.
+   *
+   * @param state           the state
+   * @param phase           the phase
+   * @param contextConsumer the context consumer
+   */
   void enable(State state,
               Phase phase,
               Consumer<Callback> contextConsumer);
 
+  /**
+   * Disable.
+   *
+   * @param state           the state
+   * @param phase           the phase
+   * @param contextConsumer the context consumer
+   */
   void disable(State state,
                Phase phase,
                Consumer<Callback> contextConsumer);
@@ -19,10 +33,10 @@ public interface Dispatcher {
    * Wrapper to use the event unaware method in case you want to make decisions based on the
    * event. This is not recommended as it breaks the state machine pattern, but you do you.
    *
-   * @param context that holds onto the current state.
+   * @param context      that holds onto the current state.
    * @param currentState expected current state.
-   * @param newState new state to call.
-   * @param event that caused the transition.
+   * @param newState     new state to call.
+   * @param event        that caused the transition.
    */
   default void handleTransitionEvent(Context context, State currentState, State newState, Event event) {
     handleTransitionEvent(context, currentState, newState);
@@ -31,25 +45,28 @@ public interface Dispatcher {
   /**
    * Macro method that handles the full state change and callback execution.
    *
-   * @param context that holds onto the current state.
+   * @param context      that holds onto the current state.
    * @param currentState expected current state.
-   * @param newState new state to call.
+   * @param newState     new state to call.
    */
   void handleTransitionEvent(Context context, State currentState, State newState);
 
   /**
    * Does the state change.
-   * @param context that holds onto the current state.
-   * @param newState the new state for the context.
+   *
+   * @param context      that holds onto the current state.
+   * @param currentState the current state
+   * @param newState     the new state for the context.
    * @return the actual state the context had. It's possible its different than the current state.
    */
   State changeState(final Context context, final State currentState, final State newState);
 
   /**
    * Dispatches the callbacks for the given state and phase to all listeners. This builds the callback object.
-   * @param context that holds onto the current state.
+   *
+   * @param context      that holds onto the current state.
    * @param currentState the current state.
-   * @param phase the phase of the transition.
+   * @param phase        the phase of the transition.
    */
   void dispatchCallbacks(Context context,
                          State currentState,
@@ -57,6 +74,7 @@ public interface Dispatcher {
 
   /**
    * Executes the callback.
+   *
    * @param consumer to call with the callback.
    * @param callback the callback itself.
    */

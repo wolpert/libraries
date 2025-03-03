@@ -30,6 +30,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Proxy manager test.
+ */
 @ExtendWith(MockitoExtension.class)
 class ProxyManagerTest {
 
@@ -47,11 +50,17 @@ class ProxyManagerTest {
 
   private ProxyManager manager;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   public void setup() {
     manager = new ProxyManager(resolver, translator, delayManager);
   }
 
+  /**
+   * Proxy data found.
+   */
   @Test
   public void proxy_dataFound() {
     when(resolver.resolve(NAMESPACE, LOOKUP, ID)).thenReturn(Optional.of(mockedData));
@@ -63,6 +72,9 @@ class ProxyManagerTest {
   }
 
 
+  /**
+   * Proxy data not found.
+   */
   @Test
   public void proxy_dataNotFound() {
     when(resolver.resolve(NAMESPACE, LOOKUP, ID)).thenReturn(Optional.empty());

@@ -21,6 +21,11 @@ public class StateMachineDefinition {
   private final Map<State, Map<Event, State>> transitions;
   private final State initialState;
 
+  /**
+   * Instantiates a new State machine definition.
+   *
+   * @param builder the builder
+   */
   public StateMachineDefinition(final StateMachineDefinitionBuilder<?> builder) {
     log.info("StateMachineDefinition()");
     if (builder.initialState == null) {
@@ -30,6 +35,11 @@ public class StateMachineDefinition {
     this.initialState = builder.initialState;
   }
 
+  /**
+   * Builder state machine definition . builder.
+   *
+   * @return the state machine definition . builder
+   */
   public static StateMachineDefinition.Builder builder() {
     return new StateMachineDefinition.Builder();
   }
@@ -110,6 +120,9 @@ public class StateMachineDefinition {
     return Objects.hash(transitions, initialState);
   }
 
+  /**
+   * The type Builder.
+   */
   public static class Builder extends StateMachineDefinitionBuilder<StateMachineDefinition> {
 
     @Override
@@ -119,28 +132,65 @@ public class StateMachineDefinition {
 
   }
 
+  /**
+   * The type State machine definition builder.
+   *
+   * @param <T> the type parameter
+   */
   @NotThreadSafe
   public abstract static class StateMachineDefinitionBuilder<T> {
 
+    /**
+     * The States.
+     */
     protected final Set<State> states;
+    /**
+     * The Transitions.
+     */
     protected final Map<State, Map<Event, State>> transitions;
+    /**
+     * The Initial state.
+     */
     State initialState;
 
+    /**
+     * Instantiates a new State machine definition builder.
+     */
     public StateMachineDefinitionBuilder() {
       this.states = new HashSet<>();
       this.transitions = new HashMap<>();
     }
 
+    /**
+     * Add state state machine definition builder.
+     *
+     * @param name the name
+     * @return the state machine definition builder
+     */
     public StateMachineDefinitionBuilder<T> addState(final String name) {
       return addState(State.of(name));
     }
 
+    /**
+     * Add state state machine definition builder.
+     *
+     * @param state the state
+     * @return the state machine definition builder
+     */
     public StateMachineDefinitionBuilder<T> addState(final State state) {
       states.add(state);
       transitions.put(state, new HashMap<>());
       return this;
     }
 
+    /**
+     * Add transition state machine definition builder.
+     *
+     * @param from  the from
+     * @param event the event
+     * @param to    the to
+     * @return the state machine definition builder
+     */
     public StateMachineDefinitionBuilder<T> addTransition(final State from, final Event event, final State to) {
       if (!states.contains(from)) {
         throw new IllegalArgumentException("State " + from + " is not in the state machine.");
@@ -152,6 +202,12 @@ public class StateMachineDefinition {
       return this;
     }
 
+    /**
+     * Sets initial state.
+     *
+     * @param initialState the initial state
+     * @return the initial state
+     */
     public StateMachineDefinitionBuilder<T> setInitialState(final State initialState) {
       if (!states.contains(initialState)) {
         throw new IllegalArgumentException("State " + initialState + " is not in the state machine.");
@@ -160,6 +216,11 @@ public class StateMachineDefinition {
       return this;
     }
 
+    /**
+     * Build t.
+     *
+     * @return the t
+     */
     public abstract T build();
 
   }

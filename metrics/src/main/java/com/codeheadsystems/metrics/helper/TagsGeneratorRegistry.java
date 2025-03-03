@@ -24,6 +24,7 @@ public class TagsGeneratorRegistry {
   /**
    * Register a class with a tags generator.
    *
+   * @param <R>           the type parameter
    * @param clazz         for the generator.
    * @param tagsGenerator for the class.
    */
@@ -34,6 +35,7 @@ public class TagsGeneratorRegistry {
   /**
    * Deregister a class.
    *
+   * @param <R>   the type parameter
    * @param clazz for the generator.
    */
   public <R> void deregister(final Class<R> clazz) {
@@ -43,8 +45,8 @@ public class TagsGeneratorRegistry {
   /**
    * Get the tags generator for the class.
    *
-   * @param clazz for the generator.
    * @param <R>   the type.
+   * @param clazz for the generator.
    * @return tags generator.
    */
   @SuppressWarnings("unchecked")
@@ -56,9 +58,9 @@ public class TagsGeneratorRegistry {
    * Helper method to aggregate tags if they exist in the registry.
    * If the object is null, this won't do anything.
    *
+   * @param <R>          the type.
    * @param existingTags to aggregate to.
    * @param object       to get the tags from.
-   * @param <R>          the type.
    */
   public <R> void aggregateIfFound(final Tags existingTags, final R object) {
     if (object == null) {

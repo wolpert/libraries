@@ -29,16 +29,40 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Ddb entry converter test.
+ */
 @ExtendWith(MockitoExtension.class)
 class DdbEntryConverterTest {
 
+  /**
+   * The constant NAMESPACE.
+   */
   public static final String NAMESPACE = "namespace";
+  /**
+   * The constant LOOKUP.
+   */
   public static final String LOOKUP = "lookup";
+  /**
+   * The constant DISCRIMINATOR.
+   */
   public static final String DISCRIMINATOR = "discriminator";
+  /**
+   * The constant HASH.
+   */
   public static final String HASH = "hash";
+  /**
+   * The constant RANGE.
+   */
   public static final String RANGE = "range";
+  /**
+   * The constant ENTRY_WITHOUT_DATA.
+   */
   public static final DdbEntry ENTRY_WITHOUT_DATA = new DdbEntry(HASH, RANGE);
   private static final String JSON = "JSON";
+  /**
+   * The constant ENTRY_WITH_DATA.
+   */
   public static final DdbEntry ENTRY_WITH_DATA = new DdbEntry(HASH, RANGE, JSON);
 
   @Mock private Hasher hasher;
@@ -47,11 +71,17 @@ class DdbEntryConverterTest {
 
   private DdbEntryConverter converter;
 
+  /**
+   * Sets .
+   */
   @BeforeEach
   void setup() {
     converter = new DdbEntryConverter(hasher, jsonConverter);
   }
 
+  /**
+   * Convert without mock data.
+   */
   @Test
   void convert_withoutMockData() {
     when(hasher.hash(LOOKUP, DISCRIMINATOR)).thenReturn(RANGE);
@@ -63,6 +93,9 @@ class DdbEntryConverterTest {
         .hasFieldOrPropertyWithValue("mockData", null);
   }
 
+  /**
+   * Convert with mock data.
+   */
   @Test
   void convert_withMockData() {
     when(hasher.hash(LOOKUP, DISCRIMINATOR)).thenReturn(RANGE);
@@ -75,12 +108,18 @@ class DdbEntryConverterTest {
         .hasFieldOrPropertyWithValue("mockData", JSON);
   }
 
+  /**
+   * To mocked data nofield.
+   */
   @Test
   void toMockedData_nofield() {
     assertThat(converter.toMockedData(ENTRY_WITHOUT_DATA))
         .isEmpty();
   }
 
+  /**
+   * To mocked data withfield.
+   */
   @Test
   void toMockedData_withfield() {
     when(jsonConverter.convert(JSON, MockedData.class)).thenReturn(mockedData);

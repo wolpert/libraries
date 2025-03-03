@@ -21,6 +21,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The type Synchronous dispatcher test.
+ */
 @ExtendWith(MockitoExtension.class)
 class SynchronousDispatcherTest extends TestBase {
 
@@ -30,11 +33,17 @@ class SynchronousDispatcherTest extends TestBase {
 
   private Dispatcher dispatcher;
 
+  /**
+   * Sets up.
+   */
   @BeforeEach
   void setUp() {
     dispatcher = new SynchronousDispatcher(stateMachineDefinition.states());
   }
 
+  /**
+   * Dispatch callbacks no exception.
+   */
   @Test
   void dispatchCallbacks_noException() {
     dispatcher.enable(ONE, Phase.TICK, consumer);
@@ -45,6 +54,9 @@ class SynchronousDispatcherTest extends TestBase {
     assertThat(callback.getValue().phase()).isEqualTo(Phase.TICK);
   }
 
+  /**
+   * Dispatch callbacks with exception.
+   */
   @Test
   void dispatchCallbacks_withException() {
     doThrow(new RuntimeException("test")).when(consumer).accept(callback.capture());
@@ -55,6 +67,9 @@ class SynchronousDispatcherTest extends TestBase {
     assertThat(callback.getValue().phase()).isEqualTo(Phase.TICK);
   }
 
+  /**
+   * Handle transition event.
+   */
   @Test
   void handleTransitionEvent() {
     dispatcher.enable(ONE, Phase.EXIT, consumer);
@@ -70,6 +85,9 @@ class SynchronousDispatcherTest extends TestBase {
     assertThat(callback.getAllValues().get(1).phase()).isEqualTo(Phase.ENTER);
   }
 
+  /**
+   * Handle transition event no fail when context has wronge state.
+   */
   @Test
   void handleTransitionEvent_noFailWhenContextHasWrongeState() {
     dispatcher.enable(ONE, Phase.EXIT, consumer);

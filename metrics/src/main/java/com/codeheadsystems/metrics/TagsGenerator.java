@@ -3,6 +3,8 @@ package com.codeheadsystems.metrics;
 /**
  * A supplier for tags given the object in question. Example, an HTTP response object
  * could supply tags using data from the response.
+ *
+ * @param <T> the type parameter
  */
 @FunctionalInterface
 public interface TagsGenerator<T> {
@@ -11,7 +13,7 @@ public interface TagsGenerator<T> {
    * Get the tags for the object.
    *
    * @param object to get tags for.
-   * @return tags.
+   * @return tags. tags
    */
   Tags from(T object);
 

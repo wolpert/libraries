@@ -18,6 +18,9 @@ package com.codeheadsystems.oop.mock.model;
 
 import com.codeheadsystems.test.model.BaseJacksonTest;
 
+/**
+ * The type Mocked data test.
+ */
 class MockedDataTest extends BaseJacksonTest<MockedData> {
 
   @Override
