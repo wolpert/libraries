@@ -7,6 +7,41 @@ test client calls the service, the service will use the mock instead of the
 intended target. Commonly used to mock out dependencies of the service under
 test.
 
+## Status
+![Oop-Mock Build](https://github.com/wolpert/oop-mock/actions/workflows/gradle.yml/badge.svg)
+
+## Adding to your projects
+
+### Version details
+
+Requires JDK 17.
+
+
+| Library           | Purpose                           | Version                                                                                       |
+|-------------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
+| oop-mock          | Core Library                      | ![feature-flag](https://img.shields.io/maven-central/v/com.codeheadsystems/oop-mock)          |
+| oop-mock-dynamodb | Core Library                      | ![feature-flag](https://img.shields.io/maven-central/v/com.codeheadsystems/oop-mock-dynamodb) |
+| oop-mock-client   | Core Library                      | ![feature-flag](https://img.shields.io/maven-central/v/com.codeheadsystems/oop-mock-client)   |
+
+
+### Server side
+
+```groovy
+dependencies {
+    implementation 'com.codeheadsystems:oop-mock:1.0.3'
+    implementation 'com.codeheadsystems:oop-mock-dynamodb:1.0.3'
+}
+```
+
+### Client test side
+
+```groovy
+dependencies {
+    implementation 'com.codeheadsystems:oop-mock-client:1.0.3'
+    implementation 'com.codeheadsystems:oop-mock-dynamodb:1.0.3'
+}
+```
+
 ## Process
 
 At its core, OopMock gets the signature of the method being mocked via the

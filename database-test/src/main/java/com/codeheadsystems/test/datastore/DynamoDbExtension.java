@@ -56,6 +56,7 @@ public class DynamoDbExtension
   private static final Class<?> CLIENT = AmazonDynamoDB.class;
   private static final Class<?> CLIENT2 = DynamoDbClient.class;
   private static final Class<?> MAPPER = DynamoDBMapper.class;
+  private static final String PORT = "port";
 
   @Override
   protected Class<?> namespaceClass() {
@@ -77,19 +78,24 @@ public class DynamoDbExtension
     });
   }
 
+  private String randomPort() {
+    return String.valueOf((int) (Math.random() * 10000 + 1000));
+  }
+
   @Override
   public void beforeAll(final ExtensionContext context) throws Exception {
     LOGGER.info("Setting in memory DynamoDB local instance");
-    String port = "8000";
+    String port = randomPort();
     DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(
         new String[]{"-inMemory", "-port", port});
     server.start();
     withStore(context, s -> {
-      AmazonDynamoDB client = getAmazonDynamoDb();
+      AmazonDynamoDB client = getAmazonDynamoDb(port);
       s.put(SERVER, server);
       s.put(CLIENT, client);
-      s.put(CLIENT2, getDynamoDbClient());
+      s.put(CLIENT2, getDynamoDbClient(port));
       s.put(MAPPER, new DynamoDBMapper(client));
+      s.put(PORT, port);
     });
   }
 
@@ -105,11 +111,11 @@ public class DynamoDbExtension
     return extensionContext.getStore(namespace).get(CLIENT);
   }
 
-  private AmazonDynamoDB getAmazonDynamoDb() {
+  private AmazonDynamoDB getAmazonDynamoDb(String port) {
     final AWSCredentials credentials = new BasicAWSCredentials("one", "two");
     final AWSCredentialsProvider provider = new AWSStaticCredentialsProvider(credentials);
     final AwsClientBuilder.EndpointConfiguration configuration =
-        new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "us-west-2");
+        new AwsClientBuilder.EndpointConfiguration("http://localhost:" + port, "us-west-2");
 
     return AmazonDynamoDBClientBuilder.standard()
         .withCredentials(provider)
@@ -117,7 +123,7 @@ public class DynamoDbExtension
         .build();
   }
 
-  private DynamoDbClient getDynamoDbClient() {
+  private DynamoDbClient getDynamoDbClient(final String port) {
 
     final AwsCredentials credentials = AwsBasicCredentials.create("one", "two");
     final AwsCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(credentials);
@@ -126,7 +132,7 @@ public class DynamoDbExtension
       return DynamoDbClient.builder()
           .credentialsProvider(credentialsProvider)
           .region(Region.US_EAST_1)
-          .endpointOverride(new URI("http://localhost:8000"))
+          .endpointOverride(new URI("http://localhost:" + port))
           .build();
     } catch (URISyntaxException e) {
       throw new IllegalStateException("Should not have happened given the hardcoded url", e);

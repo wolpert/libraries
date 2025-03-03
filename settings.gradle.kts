@@ -16,5 +16,6 @@ include(
     "metrics", "metrics-declarative", "metrics-declarative-test",
     "metrics-micrometer","metrics-test",
 	"smr", "smr-yml", "smr-metrics",
-    "oop-mock","oop-mock-client","oop-mock-common","oop-mock-dynamodb","oop-mock-tests"
+    "oop-mock","oop-mock-client","oop-mock-common","oop-mock-dynamodb","oop-mock-tests",
+    "ff", "ff-metrics", "ff-test", "ff-etcd", "ff-ddb", "ff-ddb-test", "ff-sql", "ff-integ"
 )

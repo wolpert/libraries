@@ -1,25 +1,140 @@
 # Metrics
 
-Provide a wrapper around metric implementations so we can switch depending on
-our running environment.
+Project provides the ability to use micrometer metrics in your dropwizard
+project that uses Dagger for dependency injection.
 
-# Usage
+Also provides a test package (metrics-test) so your tests can extend
+BaseMetricsTest and have access to metrics during your development. Makes it
+easier to use metrics in general by making testing easier.
 
-```java
-final Metrics metricsImplementation = metricsFatory.build();
-metricsImplementation.count(1, name(getClass(), "metricName"));
-metricsImplementation.close();
+## Status
 
-// or
-threadLocalMetricsFactory.with(() -> {
-    threadLocalMetricsFactory.get().count(1, name(getClass(), "metricName"));
-        });
+![Metrics Build](https://github.com/wolpert/metrics/actions/workflows/gradle.yml/badge.svg)
 
+| Library             | Purpose                | Version                                                                                    |
+|---------------------|------------------------|--------------------------------------------------------------------------------------------|
+| metrics             | Core Library           | ![metrics](https://img.shields.io/maven-central/v/com.codeheadsystems/metrics)             |
+| metrics-test        | Testing utilities      | ![metrics](https://img.shields.io/maven-central/v/com.codeheadsystems/metrics-test)        |
+| metrics-micrometer  | Micrometer integration | ![metrics](https://img.shields.io/maven-central/v/com.codeheadsystems/metrics-micrometer)  |
+| metrics-declarative | Declarative style      | ![metrics](https://img.shields.io/maven-central/v/com.codeheadsystems/metrics-declarative) |
+
+
+## To use
+
+Include the following in your pom/gradle
+
+```groovy
+dependencies {
+    implementation 'com.codeheadsystems:metrics:VERSION'
+    testImplementation 'com.codeheadsystems:metrics-test:VERSION'
+}
 ```
 
-The project is setup to use Dagger by default, but you can easily use guice,
-spring, etc.
+## Usage
 
-# Design
+Create a singleton instance of the metric factory, and call it directly.
+If you are using Dagger or spring, it is recommended to inject the
+factory into your code instead of using a static variable. 
 
-![design](docs/design.drawio.svg) [(link)](https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Untitled%20Diagram.drawio#R7VnbctsgEP0aP6YjdPHlMU7stNOmzYzbyTMWWGKChILxJfn6ogh0Q7blxI49Gb940LIscPaw7OKOcxOt7zhMwnuGMO3YFlp3nNuObfeBJ39TwUsmAH13kEkCTpCSFYIJecVKaCnpgiA8rygKxqggSVXoszjGvqjIIOdsVVWbMVqdNYEBNgQTH1JT%2BkiQCNW%2BPKuQf8ckCPXMwFI9EdTKSjAPIWKrksgZdZwbzpjIWtH6BtMUPI1LNm68oTdfGMexaDNg2IvpzxF%2BRavx8914RsjT8%2FRKWVlCulAbvseCE3%2Bu1ixeNBCcLWKEU1tWxxmuQiLwJIF%2B2ruSrpeyUERUfgHZVFYxF3i9cbkgB0GyB7NITvwiVfSArsJNMaenPleFF4CGNix5QA%2BDyvFBbrnARjYUPHtAZRtQ%2FV5Qei5w9atogf6p4XI2MetHlNCTw2W754ZXz8CrY3epnHWIyFI2g7SZsy3rkROVOhv0x9AXLF1cs37NCYeF2LVqB9gzEQYNCHvHQrhvIDxdEIrMs4tjdJ1eHfKLJTiWcEjJmFANjvxSFxWwq8ys0jgzjJFxw9QglJOzBffxbnYIyAMsdsVz0yVlzDWDOaZQkGV1bU2gK3MPjMhV5%2B51aicoP1HaRLYnNap8L9UMedYOQ9mmDUNvHMj3%2BH5aDAxagBaMKDm9Roe5XK%2FQ2ojAiMXob0hi3aV1XS0oM0tyZaKmZVyELGAxpKNCOoSUBNLULcWz9AynJ5TIbOVaiadMCBZ9gIm7GWY1U0x5U2cUypnOQbjmgSpFBoNv3vvI1u3tsnRktumdHDbOP3C2lHky111TXlf%2B1NDv2S1u10%2BN%2FcBMdBtgvOUseSSvkKPWyNc8dWLg3XpQPj3wZtr8R4QpU61NqfNhIenWr5fTQ2KmxtsunCll%2FlNKOjgP3wI6qCQk1mkSEvDR%2B%2BKSkmzBzP0KDLEvDDkeQ7wvwBCnLUEu%2FNibH90vwI%2FWAeTCj735YT43%2FZvjbRQpXkLKNKgQ5qxixuVS2Z8U5gtZpeIpMaP7vEj%2FtxjOWCyu5m%2BEuJYKwErWWe2j%2BuvVUKr%2FIUN%2FQ46hLM%2BsX8yHtFRkZZa3115ntpe8ALJq77SNVWSbDR61knL6XoWeV05DJeV%2BaiVlvt0dMYqlDtCjDp0r91uGtd7poho4VFSrG3p3VJOfxd%2BnmXrxJ7Qz%2Bg8%3D)
+Metric
+instances are created when the with() method is called, and stored in
+a thread-local variable. You can nest using with() methods or call the
+metrics() method directly. 
+
+Note if you call metrics() without being within a with() block, you will
+get null metrics object. No code failure will happen, but no metrics will
+be emitted. There will be log statements indicating that this has happened
+for debugging purposes.
+
+### Dropwizard
+
+Ideally, the resource manager will enable the metrics object via closure
+before your resources are there. Expect an update with a working example.
+
+## Declarative Metrics
+
+As much as I hate aspectj, there is a really good reason to use it
+for simplifying metrics. The metrics package will end up providing
+an annotation library that works with AspectJ (compile time or runtime)
+so you can limit your code integration. This will include naming the
+metrics and dynamic tagging support.
+
+## Example code
+
+The following is a basic example case. More complex examples are possible.
+
+### Java code that uses metrics
+
+```java
+public class AClass {
+  private final MetricsFactory metricsFactory;
+
+  public AClass(final MetricsFactory metricsFactory) {
+    this.metricsFactory = metricsFactory;
+  }
+
+  public boolean howSoonIsNow() {
+    metricsFactory.with(metrics ->
+        metrics.time("MetricName", () -> {
+          internalMethod();
+          return System.currentTimeMillis() > 1000;
+        }));
+  }
+
+  private void internalMethod() {
+    metricsFactory.metrics().increment("internalMethod.call");
+  }
+}
+```
+
+### Unit Test Example
+
+```java
+public class AClassTest extends BaseMetricTest {
+  @Test
+  public void testDoSomething_works() {
+    final ACLass testInstance = new AClass(metricsFactory); // metrics from parent class
+    assert testInstance.howSoonIsNow() == true; // The supplier is called from the metrics object
+  }
+}
+```
+
+## FAQ
+
+### Why not traces?
+
+When people say traces, they mean implementations based on the open-source
+jaeger project by uber. Traces are really great and for any service that with
+real TPS (greater than 1k) generates lots of data... so much so that you 
+don't keep the traces over the long haul because it is simply too much data.
+
+But the advantage of traces is you can grab a bunch of data, use that data
+to inject metrics and then sample the traces for debugging your system instead
+of logs. Traces/spans that remain are complete; meaning that they represent one
+call through your stack from ingestion. If you just sample logs directly, you
+cannot be sure that a request in service one calling service two will have logs
+from both services.
+
+The best trace solutions are proprietary and expensive. And what I learned at
+Amazon, if your service is 32k TPS, no one really looks at logs or traces anyways.
+It's better to have a great metrics solution. So traces are good for mid-levels, 
+not small services which need logs, or large services which need to simplify
+storage management. That is what this code base aims to do.
+
+### How about metric files like Amazon used to do internally?
+
+At amazon before cloudwatch, the internal metric service would 'write to disk'
+metric results per service request when writing microservices. This metric output
+would contain all metrics generated in that request. A separate process would read
+these files and publish the results to the metric backend. This reduced any 
+overhead of the service calling a metrics backend at the cost of files on disk.
+(Similar to how traces are actually done today.) If you use cloudwatch, this is akin
+to using 'metric filters' which scan your logs for metrics to publish. Cheaper than 
+if you call the metrics service directly even in batches. And of course, you are less
+likely to lose data if the service shutdown. (Not totally true in the old system.)
+
+I plan on created a metric publisher for this project that will use the old Amazon
+style, but this is low priority. If you use prometheus, you are pretty close to
+doing this anyways... which honestly is the preferred approach. But because folks
+may want different connectors, this is an easy method to add them instead of making
+publishers in java. (And yes... eventually this library will be in multiple languages.)
