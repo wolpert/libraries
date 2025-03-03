@@ -17,5 +17,5 @@ include(
     "metrics-micrometer","metrics-test",
 	"smr", "smr-yml", "smr-metrics",
     "oop-mock","oop-mock-client","oop-mock-common","oop-mock-dynamodb","oop-mock-tests",
-    "ff", "ff-metrics", "ff-test", "ff-etcd", "ff-ddb", "ff-ddb-test", "ff-sql", "ff-integ"
+    "feature-flag", "feature-flag-metrics", "feature-flag-test", "feature-flag-etcd", "feature-flag-ddb", "feature-flag-ddb-test", "feature-flag-sql", "feature-flag-integ"
 )

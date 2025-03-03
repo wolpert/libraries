@@ -1,17 +1,21 @@
 plugins {
     id("buildlogic.java-library-conventions")
+    id("buildlogic.java-publish-conventions")
 }
+
 
 dependencies {
 
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api(project(":feature-flag"))
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation(project(":ff"))
     implementation(libs.slf4j.api)
-    implementation(libs.guava)
+    implementation(libs.aws.sdk2.ddb)
 
-    implementation(libs.bundles.logback)
-    implementation(libs.bundles.testing)
+    // Immutables
+    compileOnly(libs.immutables.annotations)
+    annotationProcessor(libs.immutables.value)
+
+    testImplementation(libs.bundles.testing)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
