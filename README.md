@@ -11,6 +11,9 @@ on me to do updates. The independent services I'm writing will
 still be in their own repos. But I will unify the version
 numbers.
 
+## Java support
+
+Requires JDK 17 or higher.
 
 ## Installation
 
