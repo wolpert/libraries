@@ -15,7 +15,7 @@ include(
 	"codehead-test", "database-test",
     "metrics", "metrics-declarative", "metrics-declarative-test",
     "metrics-micrometer","metrics-test",
-	"smr", "smr-yml", "smr-metrics",
+    "local-queue", "smr", "smr-yml", "smr-metrics",
     "oop-mock","oop-mock-client","oop-mock-common","oop-mock-dynamodb","oop-mock-tests",
     "feature-flag", "feature-flag-metrics", "feature-flag-test", "feature-flag-etcd", "feature-flag-ddb", "feature-flag-ddb-test", "feature-flag-sql", "feature-flag-integ"
 )
