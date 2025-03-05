@@ -6,7 +6,7 @@ aspectj = "1.9.22.1"
 assertj = "3.27.3"
 aws-dynamodblocal = "2.5.4"
 awsSDK1 = "1.12.782"
-awsSDK2 = "2.30.32"
+awsSDK2 = "2.30.33"
 c3p0 = "0.10.2"
 commons-io = "2.18.0"
 dagger = "2.55"
@@ -26,7 +26,7 @@ metrics = '4.2.30'
 mokito = '5.16.0'
 pgjdbc = '42.7.5'
 slf4j = '2.0.17'
-testcontainers = '1.20.5'
+testcontainers = '1.20.6'
 
 [libraries]
 aspectjrt = { module = "org.aspectj:aspectjrt", version.ref = "aspectj" }
