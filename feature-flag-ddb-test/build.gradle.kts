@@ -12,7 +12,8 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation(libs.slf4j.api)
-    implementation(libs.aws.sdk2.ddb)
+    implementation(platform(libs.aws.sdk2.bom))
+    implementation("software.amazon.awssdk:dynamodb")
 
     // Immutables
     compileOnly(libs.immutables.annotations)

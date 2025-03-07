@@ -34,7 +34,6 @@ aspectjweaver = { module = "org.aspectj:aspectjweaver", version.ref = "aspectj" 
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 aws-dynamodblocal = { module = "com.amazonaws:DynamoDBLocal", version.ref = "aws-dynamodblocal" }
 aws-sdk-ddb = { module = "com.amazonaws:aws-java-sdk-dynamodb", version.ref = "awsSDK1" }
-aws-sdk2-ddb = { module = "software.amazon.awssdk:dynamodb", version.ref = "awsSDK2" }
 aws-sdk2-bom = { module = "software.amazon.awssdk:bom", version.ref = "awsSDK2" }
 c3p0 =  { module = "com.mchange:c3p0", version.ref ="c3p0" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }

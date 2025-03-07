@@ -12,7 +12,7 @@ dependencies {
     implementation("software.amazon.awssdk:dynamodb")
     implementation(project(":codehead-test"))
     implementation(libs.aws.dynamodblocal)
-    implementation(libs.aws.sdk2.ddb)
+    implementation("software.amazon.awssdk:dynamodb")
     implementation(libs.slf4j.api)
     api(libs.bundles.testing)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
