@@ -10,14 +10,14 @@ dependencies {
     implementation(libs.commons.io)
 
     implementation(libs.dagger)
-    annotationProcessor(libs.dagger.compiler)
+    annotationProcessor(libs.bundles.dagger.annotation)
     implementation(libs.immutables.annotations)
     annotationProcessor(libs.immutables.value )
 
     testAnnotationProcessor(libs.immutables.value)
     testImplementation(libs.bundles.testing)
     testImplementation(libs.bundles.logback)
-    testAnnotationProcessor(libs.dagger.compiler)
+    testAnnotationProcessor(libs.bundles.dagger.annotation)
     testImplementation(project(":codehead-test"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
