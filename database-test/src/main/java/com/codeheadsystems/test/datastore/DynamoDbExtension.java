@@ -102,6 +102,18 @@ public class DynamoDbExtension implements BeforeAllCallback, AfterAllCallback, B
   }
 
   @Override
+  public void beforeEach(final ExtensionContext context) {
+    final ClassInstanceManager classInstanceManager = classInstanceManager(context);
+    context.getRequiredTestInstances().getAllInstances().forEach(instance -> {
+      Arrays.stream(instance.getClass().getDeclaredFields())
+          .filter(f -> f.isAnnotationPresent(DataStore.class))
+          .forEach(field -> {
+            setValueForField(classInstanceManager, instance, field);
+          });
+    });
+  }
+
+  @Override
   public boolean supportsParameter(final ParameterContext parameterContext,
                                    final ExtensionContext extensionContext) throws ParameterResolutionException {
     final Class<?> type = parameterContext.getParameter().getType();
@@ -133,10 +145,8 @@ public class DynamoDbExtension implements BeforeAllCallback, AfterAllCallback, B
   }
 
   private DynamoDbClient getDynamoDbClient(final String port) {
-
     final AwsCredentials credentials = AwsBasicCredentials.create("one", "two");
     final AwsCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(credentials);
-
     try {
       return DynamoDbClient.builder()
           .credentialsProvider(credentialsProvider)
@@ -146,18 +156,6 @@ public class DynamoDbExtension implements BeforeAllCallback, AfterAllCallback, B
     } catch (URISyntaxException e) {
       throw new IllegalStateException("Should not have happened given the hardcoded url", e);
     }
-  }
-
-  @Override
-  public void beforeEach(final ExtensionContext context) {
-    final ClassInstanceManager classInstanceManager = classInstanceManager(context);
-    context.getRequiredTestInstances().getAllInstances().forEach(instance -> {
-      Arrays.stream(instance.getClass().getDeclaredFields())
-          .filter(f -> f.isAnnotationPresent(DataStore.class))
-          .forEach(field -> {
-            setValueForField(classInstanceManager, instance, field);
-          });
-    });
   }
 
   private void setValueForField(final ClassInstanceManager classInstanceManager,
