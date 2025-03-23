@@ -28,6 +28,7 @@ import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Set;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -52,31 +53,11 @@ public class DynamoDbExtension
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbExtension.class);
 
-  private static final Class<?> SERVER = DynamoDBProxyServer.class;
-  private static final Class<?> CLIENT = AmazonDynamoDB.class;
-  private static final Class<?> CLIENT2 = DynamoDbClient.class;
-  private static final Class<?> MAPPER = DynamoDBMapper.class;
-  private static final String PORT = "port";
-
   @Override
   protected Class<?> namespaceClass() {
     return DynamoDbExtension.class;
   }
 
-  @Override
-  public void afterAll(final ExtensionContext context) {
-    LOGGER.info("Tearing down in memory DynamoDB local instance");
-    withStore(context, s -> {
-      try {
-        s.remove(SERVER, DynamoDBProxyServer.class).stop();
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      s.remove(CLIENT);
-      s.remove(CLIENT2);
-      s.remove(MAPPER);
-    });
-  }
 
   private String randomPort() {
     return String.valueOf((int) (Math.random() * 10000 + 1000));
@@ -91,24 +72,40 @@ public class DynamoDbExtension
     server.start();
     withStore(context, s -> {
       AmazonDynamoDB client = getAmazonDynamoDb(port);
-      s.put(SERVER, server);
-      s.put(CLIENT, client);
-      s.put(CLIENT2, getDynamoDbClient(port));
-      s.put(MAPPER, new DynamoDBMapper(client));
-      s.put(PORT, port);
+      s.put(DynamoDBProxyServer.class, server);
+      s.put(AmazonDynamoDB.class, client);
+      s.put(DynamoDbClient.class, getDynamoDbClient(port));
+      s.put(DynamoDBMapper.class, new DynamoDBMapper(client));
+    });
+  }
+
+  @Override
+  public void afterAll(final ExtensionContext context) {
+    LOGGER.info("Tearing down in memory DynamoDB local instance");
+    withStore(context, s -> {
+      try {
+        s.remove(DynamoDBProxyServer.class, DynamoDBProxyServer.class).stop();
+      } catch (Exception e) {
+        LOGGER.error("Failed to tear down DynamoDBProxyServer", e);
+      }
+      s.remove(DynamoDBMapper.class);
+      s.remove(AmazonDynamoDB.class);
+      s.remove(DynamoDbClient.class, DynamoDbClient.class).close();
     });
   }
 
   @Override
   public boolean supportsParameter(final ParameterContext parameterContext,
                                    final ExtensionContext extensionContext) throws ParameterResolutionException {
-    return parameterContext.isAnnotated(DataStore.class);
+    final Class<?> type = parameterContext.getParameter().getType();
+    return parameterContext.isAnnotated(DataStore.class) && extensionContext.getStore(namespace).get(type) != null;
   }
 
   @Override
   public Object resolveParameter(final ParameterContext parameterContext,
                                  final ExtensionContext extensionContext) throws ParameterResolutionException {
-    return extensionContext.getStore(namespace).get(CLIENT);
+    final Class<?> type = parameterContext.getParameter().getType();
+    return extensionContext.getStore(namespace).get(type);
   }
 
   private AmazonDynamoDB getAmazonDynamoDb(String port) {

@@ -66,11 +66,11 @@ public abstract class DataStoreExtension implements BeforeEachCallback {
   @Override
   public void beforeEach(final ExtensionContext context) {
     withStore(context, store -> {
-      context.getRequiredTestInstances().getAllInstances().forEach(o -> {
-        Arrays.stream(o.getClass().getDeclaredFields())
+      context.getRequiredTestInstances().getAllInstances().forEach(instance -> {
+        Arrays.stream(instance.getClass().getDeclaredFields())
             .filter(f -> f.isAnnotationPresent(DataStore.class))
             .forEach(field -> {
-              setValueForField(store, o, field);
+              setValueForField(store, instance, field);
             });
       });
     });

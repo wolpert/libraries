@@ -22,11 +22,13 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
+import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 import com.amazonaws.services.dynamodbv2.model.BillingMode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 /**
  * The type Dynamo db extension test.
@@ -49,6 +51,8 @@ class DynamoDbExtensionTest {
   @DataStore private DynamoDBMapper mapper;
   @DataStore private AmazonDynamoDB amazonDynamoDb;
 
+  private DynamoDbClient nonAnnotatedClient;
+
   /**
    * Sets .
    */
@@ -58,6 +62,47 @@ class DynamoDbExtensionTest {
         mapper.generateCreateTableRequest(Entry.class)
             .withBillingMode(BillingMode.PAY_PER_REQUEST));
   }
+
+  @BeforeEach
+  void setupInternalClient(@DataStore DynamoDbClient providedClient) {
+    nonAnnotatedClient = providedClient;
+  }
+
+  @Test
+  void testInternalClient() {
+    assertThat(nonAnnotatedClient)
+        .isNotNull();
+  }
+
+  @Test
+  void testParamIsNotNull_DynamoDbClient(@DataStore DynamoDbClient providedClient) {
+    assertThat(providedClient)
+        .isNotNull();
+  }
+
+  @Test
+  void testParamIsNotNull_DynamoDBMapper(@DataStore DynamoDBMapper providedClient) {
+    assertThat(providedClient)
+        .isNotNull();
+  }
+
+  @Test
+  void testParamIsNotNull_AmazonDynamoDB(@DataStore AmazonDynamoDB providedClient) {
+    assertThat(providedClient)
+        .isNotNull();
+  }
+
+  @Test
+  void testParamIsNotNull_DynamoDBProxyServer(@DataStore DynamoDBProxyServer providedClient) {
+    assertThat(providedClient)
+        .isNotNull();
+  }
+
+  @AfterEach
+  void tearDownInternalClient() {
+    nonAnnotatedClient = null;
+  }
+
 
   /**
    * Tear down.
