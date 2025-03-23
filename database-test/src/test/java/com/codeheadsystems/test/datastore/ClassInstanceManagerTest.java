@@ -16,19 +16,29 @@ public class ClassInstanceManagerTest {
   }
 
   @Test
-  public void testSetInstance() {
+  public void testPut() {
     String instance = "testInstance";
-    classInstanceManager.setInstance(String.class, instance);
-    assertThat(classInstanceManager.getInstance(String.class))
+    classInstanceManager.put(String.class, instance);
+    assertThat(classInstanceManager.get(String.class))
         .isPresent()
         .contains(instance);
   }
 
   @Test
-  public void testGetInstance() {
+  public void testPut_withoutClass() {
     String instance = "testInstance";
-    classInstanceManager.setInstance(String.class, instance);
-    Optional<String> retrievedInstance = classInstanceManager.getInstance(String.class);
+    classInstanceManager.put(instance);
+    assertThat(classInstanceManager.get(String.class))
+        .isPresent()
+        .contains(instance);
+  }
+
+
+  @Test
+  public void testGet() {
+    String instance = "testInstance";
+    classInstanceManager.put(String.class, instance);
+    Optional<String> retrievedInstance = classInstanceManager.get(String.class);
     assertThat(retrievedInstance)
         .isPresent().
         contains(instance);
@@ -37,26 +47,26 @@ public class ClassInstanceManagerTest {
   @Test
   public void testRemoveInstance() {
     String instance = "testInstance";
-    classInstanceManager.setInstance(String.class, instance);
-    Optional<String> removedInstance = classInstanceManager.removeInstance(String.class);
+    classInstanceManager.put(String.class, instance);
+    Optional<String> removedInstance = classInstanceManager.remove(String.class);
     assertThat(removedInstance)
         .isPresent()
         .contains(instance);
-    assertThat(classInstanceManager.getInstance(String.class)).isNotPresent();
+    assertThat(classInstanceManager.get(String.class)).isNotPresent();
   }
 
   @Test
   public void testClear() {
-    classInstanceManager.setInstance(String.class, "testInstance");
-    classInstanceManager.setInstance(Integer.class, 123);
+    classInstanceManager.put(String.class, "testInstance");
+    classInstanceManager.put(Integer.class, 123);
     classInstanceManager.clear();
-    assertThat(classInstanceManager.getInstance(String.class)).isNotPresent();
-    assertThat(classInstanceManager.getInstance(Integer.class)).isNotPresent();
+    assertThat(classInstanceManager.get(String.class)).isNotPresent();
+    assertThat(classInstanceManager.get(Integer.class)).isNotPresent();
   }
 
   @Test
   public void testHasInstance() {
-    classInstanceManager.setInstance(String.class, "testInstance");
+    classInstanceManager.put(String.class, "testInstance");
     assertThat(classInstanceManager.hasInstance(String.class)).isTrue();
     assertThat(classInstanceManager.hasInstance(Integer.class)).isFalse();
   }

@@ -26,11 +26,13 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Set;
+import java.util.Arrays;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
@@ -47,65 +49,75 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 /**
  * Setups the ddb instance.
  */
-public class DynamoDbExtension
-    extends DataStoreExtension
-    implements BeforeAllCallback, AfterAllCallback, ParameterResolver {
+public class DynamoDbExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, ParameterResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbExtension.class);
-
-  @Override
-  protected Class<?> namespaceClass() {
-    return DynamoDbExtension.class;
-  }
-
+  private static final ExtensionContext.Namespace namespace = ExtensionContext.Namespace.create(DynamoDbExtension.class);
 
   private String randomPort() {
     return String.valueOf((int) (Math.random() * 10000 + 1000));
   }
 
+  private ClassInstanceManager classInstanceManager(final ExtensionContext context) {
+    return context.getStore(namespace)
+        .getOrComputeIfAbsent(ClassInstanceManager.class,
+            k -> new ClassInstanceManager(),
+            ClassInstanceManager.class);
+  }
+
   @Override
   public void beforeAll(final ExtensionContext context) throws Exception {
     LOGGER.info("Setting in memory DynamoDB local instance");
-    String port = randomPort();
-    DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(
+    final ClassInstanceManager classInstanceManager = classInstanceManager(context);
+    final String port = randomPort();
+    final DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(
         new String[]{"-inMemory", "-port", port});
     server.start();
-    withStore(context, s -> {
-      AmazonDynamoDB client = getAmazonDynamoDb(port);
-      s.put(DynamoDBProxyServer.class, server);
-      s.put(AmazonDynamoDB.class, client);
-      s.put(DynamoDbClient.class, getDynamoDbClient(port));
-      s.put(DynamoDBMapper.class, new DynamoDBMapper(client));
-    });
+    AmazonDynamoDB client = getAmazonDynamoDb(port);
+    classInstanceManager.put(DynamoDBProxyServer.class, server);
+    classInstanceManager.put(AmazonDynamoDB.class, client);
+    classInstanceManager.put(DynamoDbClient.class, getDynamoDbClient(port));
+    classInstanceManager.put(DynamoDBMapper.class, new DynamoDBMapper(client));
   }
 
   @Override
   public void afterAll(final ExtensionContext context) {
     LOGGER.info("Tearing down in memory DynamoDB local instance");
-    withStore(context, s -> {
+    final ClassInstanceManager classInstanceManager = context.getStore(namespace).remove(ClassInstanceManager.class, ClassInstanceManager.class);
+    if (classInstanceManager == null) {
+      LOGGER.error("No class instance manager found");
+      return;
+    }
+    classInstanceManager.remove(DynamoDBProxyServer.class).ifPresent(o -> {
       try {
-        s.remove(DynamoDBProxyServer.class, DynamoDBProxyServer.class).stop();
+        o.stop();
       } catch (Exception e) {
-        LOGGER.error("Failed to tear down DynamoDBProxyServer", e);
+        LOGGER.error("Error stopping DynamoDB proxy server", e);
       }
-      s.remove(DynamoDBMapper.class);
-      s.remove(AmazonDynamoDB.class);
-      s.remove(DynamoDbClient.class, DynamoDbClient.class).close();
     });
+    classInstanceManager.remove(DynamoDBMapper.class);
+    classInstanceManager.remove(AmazonDynamoDB.class);
+    classInstanceManager.remove(DynamoDbClient.class).ifPresent(DynamoDbClient::close);
+    classInstanceManager.clear();
   }
 
   @Override
   public boolean supportsParameter(final ParameterContext parameterContext,
                                    final ExtensionContext extensionContext) throws ParameterResolutionException {
     final Class<?> type = parameterContext.getParameter().getType();
-    return parameterContext.isAnnotated(DataStore.class) && extensionContext.getStore(namespace).get(type) != null;
+    final ClassInstanceManager classInstanceManager = classInstanceManager(extensionContext);
+    return parameterContext.isAnnotated(DataStore.class) && classInstanceManager.hasInstance(type);
   }
 
   @Override
   public Object resolveParameter(final ParameterContext parameterContext,
                                  final ExtensionContext extensionContext) throws ParameterResolutionException {
     final Class<?> type = parameterContext.getParameter().getType();
-    return extensionContext.getStore(namespace).get(type);
+    final ClassInstanceManager classInstanceManager = classInstanceManager(extensionContext);
+    return classInstanceManager.get(type).orElseGet(() -> {
+      LOGGER.error("No instance found for type {}", type.getSimpleName());
+      return null;
+    });
   }
 
   private AmazonDynamoDB getAmazonDynamoDb(String port) {
@@ -136,4 +148,47 @@ public class DynamoDbExtension
     }
   }
 
+  @Override
+  public void beforeEach(final ExtensionContext context) {
+    final ClassInstanceManager classInstanceManager = classInstanceManager(context);
+    context.getRequiredTestInstances().getAllInstances().forEach(instance -> {
+      Arrays.stream(instance.getClass().getDeclaredFields())
+          .filter(f -> f.isAnnotationPresent(DataStore.class))
+          .forEach(field -> {
+            setValueForField(classInstanceManager, instance, field);
+          });
+    });
+  }
+
+  private void setValueForField(final ClassInstanceManager classInstanceManager,
+                                final Object o,
+                                final Field field) {
+    final Object value = classInstanceManager.get(field.getType())
+        .orElseThrow(() -> new IllegalArgumentException("Unable to find DynamoDB extension value of type " + field.getType())); // Check the store to see we have this type.
+    LOGGER.info("Setting field {}:{}", field.getName(), field.getType().getSimpleName());
+    enableSettingTheField(field);
+    try {
+      field.set(o, value);
+    } catch (IllegalAccessException e) {
+      LOGGER.error("Unable to set the field value for {}", field.getName(), e);
+      LOGGER.error("Continuing, but expect nothing good will happen next.");
+    }
+  }
+
+  /**
+   * This allows us to set the field directly. It will fail if the security manager in play disallows it.
+   * We can talk about justifications all we want, but really we know Java is not Smalltalk. Meta programming
+   * is limited here. So... we try to do the right thing.
+   *
+   * @param field to change accessibility for.
+   */
+  protected void enableSettingTheField(final Field field) {
+    try {
+      field.setAccessible(true);
+    } catch (RuntimeException re) {
+      LOGGER.error("Unable to change accessibility for field due to private var or security manager: {}",
+          field.getName());
+      LOGGER.error("The setting will likely fail. Consider changing that type to protected.", re);
+    }
+  }
 }

@@ -7,11 +7,11 @@ public class ClassInstanceManager {
 
   private final HashMap<Class<?>, Object> instances = new HashMap<>();
 
-  public <T> Optional<T> getInstance(final Class<T> clazz) {
+  public <T> Optional<T> get(final Class<T> clazz) {
     return optionalIfSet(clazz, instances.get(clazz));
   }
 
-  public <T> Optional<T> removeInstance(final Class<T> clazz) {
+  public <T> Optional<T> remove(final Class<T> clazz) {
     return optionalIfSet(clazz, instances.remove(clazz));
   }
 
@@ -23,8 +23,12 @@ public class ClassInstanceManager {
     }
   }
 
-  public <T> void setInstance(final Class<T> clazz, final T instance) {
+  public <T> void put(final Class<T> clazz, final T instance) {
     instances.put(clazz, instance);
+  }
+
+  public <T> void put(final T instance) {
+    instances.put(instance.getClass(), instance);
   }
 
   public void clear() {
