@@ -22,13 +22,13 @@ import com.codeheadsystems.oop.mock.Hasher;
 import com.codeheadsystems.oop.mock.converter.JsonConverter;
 import com.codeheadsystems.oop.mock.manager.ResourceLookupManager;
 import com.codeheadsystems.oop.mock.translator.Translator;
-import com.google.common.collect.ImmutableMap;
 import dagger.Binds;
 import dagger.BindsOptionalOf;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Named;
@@ -144,7 +144,7 @@ public interface ResolverModule {
      * Instantiates a new Resolver config module.
      */
     public ResolverConfigModule() {
-      this(ImmutableMap.of());
+      this(Map.of());
     }
 
     /**
@@ -170,11 +170,11 @@ public interface ResolverModule {
     public Map<Class<?>, Object> fullDependencies(@Named(RESOLVER_ADDITIONAL_DEPS) final Map<Class<?>, Object> addition,
                                                   @Named(RESOLVER_INTERNAL_MAP) final Map<Class<?>, Object> internal,
                                                   final OopMockConfiguration configuration) {
-      final ImmutableMap.Builder<Class<?>, Object> builder = ImmutableMap.builder();
+      final HashMap<Class<?>, Object> builder = new HashMap<>();
       builder.putAll(internal);
       builder.putAll(addition);
       configuration.resolverConfiguration().ifPresent(rc -> builder.put(ResolverConfiguration.class, rc));
-      return builder.build();
+      return Map.copyOf(builder);
     }
 
     /**

@@ -25,7 +25,6 @@ import com.codeheadsystems.oop.dao.ddb.model.DdbEntry;
 import com.codeheadsystems.oop.test.FullDaoTest;
 import com.codeheadsystems.test.datastore.DataStore;
 import com.codeheadsystems.test.datastore.DynamoDbExtension;
-import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,6 +66,6 @@ public class FullDdbDaoTest extends FullDaoTest {
 
   @Override
   protected Map<Class<?>, Object> resolverDeps() {
-    return ImmutableMap.of(DynamoDBMapper.class, mapper);
+    return Map.of(DynamoDBMapper.class, mapper);
   }
 }

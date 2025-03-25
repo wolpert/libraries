@@ -17,7 +17,7 @@
 package com.codeheadsystems.oop.mock.model;
 
 import com.codeheadsystems.test.model.BaseJacksonTest;
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 /**
  * The type In memory mocked data store test.
@@ -33,7 +33,7 @@ class InMemoryMockedDataStoreTest extends BaseJacksonTest<InMemoryMockedDataStor
   protected InMemoryMockedDataStore getInstance() {
     return ImmutableInMemoryMockedDataStore.builder()
         .putDatastore("key",
-            ImmutableMap.of("otherkey",
+            Map.of("otherkey",
                 ImmutableMockedData.builder().marshalledData("marshalled").build()))
         .build();
   }

@@ -9,7 +9,6 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation(project(":feature-flag"))
     implementation(libs.slf4j.api)
-    implementation(libs.guava)
 
     implementation(libs.bundles.logback)
     implementation(libs.bundles.testing)

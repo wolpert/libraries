@@ -26,8 +26,8 @@ import com.codeheadsystems.oop.mock.manager.ResourceLookupManager;
 import com.codeheadsystems.oop.mock.model.ImmutableInMemoryMockedDataStore;
 import com.codeheadsystems.oop.mock.model.ImmutableMockedData;
 import com.codeheadsystems.oop.mock.model.InMemoryMockedDataStore;
-import com.google.common.collect.ImmutableMap;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class InMemoryResolverTest {
   private static final String FILENAME = "filename";
   private static final Hasher HASHER = new Hasher("blah");
   private static final InMemoryMockedDataStore datastore = ImmutableInMemoryMockedDataStore.builder()
-      .putDatastore(NAMESPACE, ImmutableMap.of(HASHER.hash(LOOKUP, DISCRIMINATOR),
+      .putDatastore(NAMESPACE, Map.of(HASHER.hash(LOOKUP, DISCRIMINATOR),
           ImmutableMockedData.builder().marshalledData(MARSHALLED_DATA).build()))
       .build();
 

@@ -26,7 +26,6 @@ import com.codeheadsystems.oop.mock.converter.JsonConverter;
 import com.codeheadsystems.oop.mock.manager.ResourceLookupManager;
 import com.codeheadsystems.oop.mock.model.MockedData;
 import com.codeheadsystems.oop.mock.translator.Translator;
-import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Map;
@@ -57,7 +56,7 @@ class ResolverFactoryTest {
    */
   @BeforeEach
   void setup() {
-    instanceMap = ImmutableMap.of(
+    instanceMap = Map.of(
         OopMockConfiguration.class, configuration,
         JsonConverter.class, converter,
         ResourceLookupManager.class, manager,
