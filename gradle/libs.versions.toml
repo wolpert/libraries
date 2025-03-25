@@ -8,6 +8,7 @@ aws-dynamodblocal = "2.6.0"
 awsSDK1 = "1.12.782"
 awsSDK2 = "2.31.6"
 c3p0 = "0.10.2"
+caffine = "3.2.0"
 commons-io = "2.18.0"
 dagger = "2.56"
 dropwizard4 = "4.0.12"
@@ -36,6 +37,8 @@ aws-dynamodblocal = { module = "com.amazonaws:DynamoDBLocal", version.ref = "aws
 aws-sdk-ddb = { module = "com.amazonaws:aws-java-sdk-dynamodb", version.ref = "awsSDK1" }
 aws-sdk2-bom = { module = "software.amazon.awssdk:bom", version.ref = "awsSDK2" }
 c3p0 =  { module = "com.mchange:c3p0", version.ref ="c3p0" }
+caffine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffine" }
+caffine-jcache = { module = "com.github.ben-manes.caffeine:jcache", version.ref = "caffine" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
@@ -74,6 +77,7 @@ testcontainers-postgres = { module = "org.testcontainers:postgresql", version.re
 javapoet = { module = "com.squareup:kotlinpoet-javapoet", version = "2.1.0" }
 
 [bundles]
+caffine = ["caffine", "caffine-jcache"]
 dagger-annotation = ['javapoet', 'dagger-compiler']
 jackson = ['jackson-dataformat-yaml']
 logback = ['logback-classic', 'logback-core']

@@ -7,7 +7,7 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.jackson.annotations)
     implementation(libs.jackson.datatype.jdk8)
-    implementation(libs.guava)
+    implementation(libs.bundles.caffine)
     implementation(libs.commons.io)
 
     implementation(libs.dagger)

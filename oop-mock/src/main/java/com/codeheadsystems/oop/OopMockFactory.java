@@ -18,9 +18,8 @@ package com.codeheadsystems.oop;
 
 import com.codeheadsystems.oop.dagger.ClassOopMockFactory;
 import com.codeheadsystems.oop.mock.PassThroughOopMock;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
@@ -48,9 +47,9 @@ public class OopMockFactory {
                         final PassThroughOopMock passThroughOopMock) {
     if (oopMockConfiguration.enabled()) {
       LOGGER.info("OopMockFactory() -> enabled");
-      final LoadingCache<Class<?>, OopMock> oppMockCache = CacheBuilder.newBuilder()
-          .build(CacheLoader.from(classOopMockFactory::create));
-      generator = oppMockCache::getUnchecked;
+      final LoadingCache<Class<?>, OopMock> oppMockCache = Caffeine.newBuilder()
+          .build(classOopMockFactory::create);
+      generator = oppMockCache::get;
     } else {
       LOGGER.info("OopMockFactory() -> disabled");
       generator = c -> passThroughOopMock;

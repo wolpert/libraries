@@ -17,9 +17,8 @@
 package com.codeheadsystems.oop.client;
 
 import com.codeheadsystems.oop.client.dagger.OopMockClientAssistedFactory;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class OopMockClientFactory {
   @Inject
   public OopMockClientFactory(final OopMockClientAssistedFactory assistedFactory) {
     LOGGER.info("OopMockClientFactory()");
-    this.cache = CacheBuilder.newBuilder().build(CacheLoader.from(assistedFactory::create));
+    this.cache = Caffeine.newBuilder().build(assistedFactory::create);
   }
 
   /**
@@ -54,7 +53,7 @@ public class OopMockClientFactory {
    */
   public OopMockClient generate(final Class<?> clazz) {
     LOGGER.info("generate({})", clazz);
-    return cache.getUnchecked(clazz);
+    return cache.get(clazz);
   }
 
 }
