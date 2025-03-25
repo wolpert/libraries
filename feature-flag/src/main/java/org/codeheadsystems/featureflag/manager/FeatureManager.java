@@ -1,6 +1,6 @@
 package org.codeheadsystems.featureflag.manager;
 
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,16 +77,16 @@ public interface FeatureManager {
     private EnablementFactory enablementFactory;
     private FeatureLookupManager featureLookupManager;
     private FeatureManagerConfiguration configuration;
-    private CacheBuilder<String, Enablement> cacheBuilder;
+    private Caffeine<String, Enablement> cacheBuilder;
     private List<Decorator<FeatureManager>> featureManagerDecorator = new ArrayList<>();
     private List<Decorator<FeatureLookupManager>> featureLookupManagerDecorator = new ArrayList<>();
 
-    private static CacheBuilder<String, Enablement> getDefaultCacheBuilder() {
-      return CacheBuilder.newBuilder()
+    private static Caffeine<String, Enablement> getDefaultCacheBuilder() {
+      return Caffeine.newBuilder()
           .maximumSize(100) // oh god, like we will have 100 features?
           .refreshAfterWrite(Duration.ofSeconds(60)) // refresh from source every 60seconds
           .expireAfterAccess(Duration.ofSeconds(600)) // expire after 600 seconds of inactivity
-          .removalListener(notification -> LOGGER.trace("removalListener({})", notification.getKey()));
+          .removalListener((key,value, cause) -> LOGGER.trace("removalListener({})", key));
     }
 
     /**
@@ -150,7 +150,7 @@ public interface FeatureManager {
      * @param cacheBuilder the configuration
      * @return the builder
      */
-    public FeatureManagerImpl.Builder withCacheBuilder(final CacheBuilder<String, Enablement> cacheBuilder) {
+    public FeatureManagerImpl.Builder withCacheBuilder(final Caffeine<String, Enablement> cacheBuilder) {
       this.cacheBuilder = cacheBuilder;
       return this;
     }
@@ -211,7 +211,7 @@ public interface FeatureManager {
      *
      * @return the cache builder
      */
-    public CacheBuilder<String, Enablement> getCacheBuilder() {
+    public Caffeine<String, Enablement> getCacheBuilder() {
       return cacheBuilder;
     }
   }

@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation (libs.guava) // for hashing
+    implementation(libs.bundles.caffine)
     implementation(libs.dropwizard4.core)
     api(libs.micrometer.core)
     implementation(libs.slf4j.api)

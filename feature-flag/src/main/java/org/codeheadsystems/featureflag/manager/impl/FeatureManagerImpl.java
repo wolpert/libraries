@@ -1,9 +1,6 @@
 package org.codeheadsystems.featureflag.manager.impl;
 
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.util.concurrent.UncheckedExecutionException;
-import java.util.concurrent.ExecutionException;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.codeheadsystems.featureflag.factory.Enablement;
 import org.codeheadsystems.featureflag.factory.EnablementFactory;
 import org.codeheadsystems.featureflag.manager.FeatureLookupManager;
@@ -31,9 +28,8 @@ public class FeatureManagerImpl implements FeatureManager {
     this.enablementFactory = builder.getEnablementFactory();
     this.featureLookupManager = builder.getFeatureLookupManager();
     this.featureEnablementCache = builder.getCacheBuilder()
-        .build(CacheLoader.asyncReloading(
-            CacheLoader.from(this::lookup),
-            builder.getConfiguration().cacheLoaderExecutor()));
+        .executor(builder.getConfiguration().cacheLoaderExecutor())
+        .build(this::lookup);
     LOGGER.info("FeatureManager({},{},{})", builder.getConfiguration(), featureLookupManager, enablementFactory);
   }
 
@@ -55,7 +51,7 @@ public class FeatureManagerImpl implements FeatureManager {
   public boolean isEnabled(String featureId, String discriminator) {
     try {
       return featureEnablementCache.get(featureId).enabled(discriminator);
-    } catch (ExecutionException | UncheckedExecutionException e) {
+    } catch (RuntimeException e) {
       LOGGER.error("Error getting feature enablement for: {}:{}", featureId, discriminator, e);
       return false;
     }

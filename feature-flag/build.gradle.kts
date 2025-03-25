@@ -11,7 +11,8 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation(libs.slf4j.api)
-    implementation(libs.guava)
+    implementation(libs.guava) // hashing
+    implementation(libs.bundles.caffine)
     implementation(libs.bundles.jdbi)
 
     // Immutables

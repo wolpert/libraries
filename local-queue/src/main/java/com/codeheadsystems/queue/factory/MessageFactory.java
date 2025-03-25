@@ -4,10 +4,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.codeheadsystems.queue.ImmutableMessage;
 import com.codeheadsystems.queue.Message;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.google.common.base.Charsets;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import java.time.Clock;
@@ -34,9 +33,9 @@ public class MessageFactory {
   @Inject
   public MessageFactory(final Clock clock) {
     this.clock = clock;
-    this.hashFunctionCache = CacheBuilder.newBuilder()
+    this.hashFunctionCache = Caffeine.newBuilder()
         .maximumSize(10) // TODO: Set this ina configuration
-        .build(CacheLoader.from(this::generateHashFunction));
+        .build(this::generateHashFunction);
     LOGGER.info("MessageFactory({})", clock);
   }
 
@@ -54,7 +53,7 @@ public class MessageFactory {
   public Message createMessage(final String messageType,
                                final String payload) {
     LOGGER.trace("createMessage({},{})", messageType, payload);
-    final HashFunction hashFunction = hashFunctionCache.getUnchecked(messageType);
+    final HashFunction hashFunction = hashFunctionCache.get(messageType);
     return ImmutableMessage.builder()
         .timestamp(clock.instant().toEpochMilli())
         .messageType(messageType)
