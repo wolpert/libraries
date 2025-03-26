@@ -9,10 +9,10 @@ awsSDK1 = "1.12.782"
 awsSDK2 = "2.31.6"
 c3p0 = "0.10.2"
 caffine = "3.2.0"
+commons-codec = "1.18.0"
 commons-io = "2.18.0"
 dagger = "2.56.1"
 dropwizard4 = "4.0.12"
-guava = "33.4.5-jre"
 jdbi = '3.48.0'
 jsr305 = "3.0.2"
 immutables = '2.10.1'
@@ -39,11 +39,11 @@ aws-sdk2-bom = { module = "software.amazon.awssdk:bom", version.ref = "awsSDK2" 
 c3p0 =  { module = "com.mchange:c3p0", version.ref ="c3p0" }
 caffine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffine" }
 caffine-jcache = { module = "com.github.ben-manes.caffeine:jcache", version.ref = "caffine" }
+commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 dropwizard4-core= { module = "io.dropwizard:dropwizard-core", version.ref = "dropwizard4" }
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
 hsqldb = { module = "org.hsqldb:hsqldb", version.ref = "hsqldb" }
 immutables-value = { module = "org.immutables:value", version.ref = "immutables" }
 immutables-annotations = { module = "org.immutables:value-annotations", version.ref = "immutables" }

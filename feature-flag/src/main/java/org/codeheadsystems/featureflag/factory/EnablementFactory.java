@@ -1,9 +1,8 @@
 package org.codeheadsystems.featureflag.factory;
 
-import com.google.common.base.Charsets;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
+import org.apache.commons.codec.digest.MurmurHash3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,14 +12,13 @@ import org.slf4j.LoggerFactory;
 public class EnablementFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EnablementFactory.class);
-
-  private final HashFunction hashFunction;
+  private final Function<String, Integer> hashFunction;
 
   /**
    * Instantiates a new Enablement factory.
    */
   public EnablementFactory() {
-    this(Hashing.murmur3_32_fixed());
+    this(EnablementFactory::defaultHash);
   }
 
   /**
@@ -28,9 +26,14 @@ public class EnablementFactory {
    *
    * @param hashFunction the hash function
    */
-  public EnablementFactory(HashFunction hashFunction) {
+  public EnablementFactory(Function<String, Integer> hashFunction) {
     this.hashFunction = hashFunction;
     LOGGER.info("EnablementFactory({})", hashFunction);
+  }
+
+  private static int defaultHash(String discriminator) {
+    byte[] bytes = discriminator.getBytes(StandardCharsets.UTF_8);
+    return MurmurHash3.hash32x86(bytes);
   }
 
   /**
@@ -82,8 +85,7 @@ public class EnablementFactory {
   public Enablement percentageFeature(double percentage) {
     LOGGER.info("percentageFeature({})", percentage);
     return (discriminator) -> {
-      final HashCode hashCode = hashFunction.hashString(discriminator, Charsets.UTF_8);
-      final int hash = hashCode.asInt();
+      final int hash = hashFunction.apply(discriminator);
       final double calculated = ((double) (hash % 100)) / 100.0;
       LOGGER.trace("percentageFeature({}:{}) -> {} {}", discriminator, percentage, calculated, calculated < percentage);
       return calculated <= percentage;

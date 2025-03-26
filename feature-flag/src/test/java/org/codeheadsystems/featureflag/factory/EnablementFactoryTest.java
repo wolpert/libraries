@@ -3,9 +3,7 @@ package org.codeheadsystems.featureflag.factory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.lenient;
 
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +22,7 @@ class EnablementFactoryTest {
 
   private static final String TEST = "test";
 
-  @Mock private HashFunction hashFunction;
-  @Mock private HashCode hashCode;
+  @Mock private Function<String, Integer> hashFunction;
 
   @InjectMocks private EnablementFactory enablementFactory;
 
@@ -73,8 +70,7 @@ class EnablementFactoryTest {
   @ParameterizedTest
   @MethodSource("provideGenerate")
   void generate(final double featurePercentage, final int hashCodeInt, final boolean expected) {
-    lenient().when(hashFunction.hashString(TEST, StandardCharsets.UTF_8)).thenReturn(hashCode);
-    lenient().when(hashCode.asInt()).thenReturn(hashCodeInt);
+    lenient().when(hashFunction.apply(TEST)).thenReturn(hashCodeInt);
     assertThat(enablementFactory.generate(featurePercentage).enabled(TEST))
         .as("featurePercentage: %s, hashCodeInt: %s", featurePercentage, hashCodeInt)
         .isEqualTo(expected);
@@ -106,8 +102,7 @@ class EnablementFactoryTest {
   @ParameterizedTest
   @MethodSource("provideGenerate")
   void percentageFeature(final double featurePercentage, final int hashCodeInt, final boolean expected) {
-    lenient().when(hashFunction.hashString(TEST, StandardCharsets.UTF_8)).thenReturn(hashCode);
-    lenient().when(hashCode.asInt()).thenReturn(hashCodeInt);
+    lenient().when(hashFunction.apply(TEST)).thenReturn(hashCodeInt);
     final boolean updatedExpected = (featurePercentage == 0.0 && hashCodeInt % 100 == 0 || expected); // 0.0 will come back as true
     assertThat(enablementFactory.percentageFeature(featurePercentage).enabled(TEST))
         .as("featurePercentage: %s, hashCodeInt: %s", featurePercentage, hashCodeInt)
