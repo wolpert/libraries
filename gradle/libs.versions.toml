@@ -10,7 +10,7 @@ awsSDK2 = "2.31.6"
 c3p0 = "0.10.2"
 caffine = "3.2.0"
 commons-io = "2.18.0"
-dagger = "2.56"
+dagger = "2.56.1"
 dropwizard4 = "4.0.12"
 guava = "33.4.5-jre"
 jdbi = '3.48.0'
@@ -73,12 +73,8 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-postgres = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 
-# Bug with dagger 2.56 https://github.com/google/dagger/issues/4624#issuecomment-2745326384
-javapoet = { module = "com.squareup:kotlinpoet-javapoet", version = "2.1.0" }
-
 [bundles]
 caffine = ["caffine", "caffine-jcache"]
-dagger-annotation = ['javapoet', 'dagger-compiler']
 jackson = ['jackson-dataformat-yaml']
 logback = ['logback-classic', 'logback-core']
 testing = ["mockito-core", "mockito-junit-jupiter", "assertj", "junit-jupiter"]

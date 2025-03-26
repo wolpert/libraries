@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.commons.io)
 
     implementation(libs.dagger)
-    annotationProcessor(libs.bundles.dagger.annotation)
+    annotationProcessor(libs.dagger.compiler)
     implementation(libs.immutables.annotations)
     annotationProcessor(libs.immutables.value )
 

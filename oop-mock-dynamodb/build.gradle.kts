@@ -14,14 +14,14 @@ dependencies {
     implementation(libs.aws.sdk.ddb)
 
     implementation(libs.dagger)
-    annotationProcessor(libs.bundles.dagger.annotation)
+    annotationProcessor(libs.dagger.compiler)
     implementation(libs.immutables.annotations)
     annotationProcessor(libs.immutables.value )
 
     testAnnotationProcessor(libs.immutables.value)
     testImplementation(libs.bundles.testing)
     testImplementation(libs.bundles.logback)
-    testAnnotationProcessor(libs.bundles.dagger.annotation)
+    testAnnotationProcessor(libs.dagger.compiler)
     testImplementation(project(":oop-mock-tests"))
     testImplementation(project(":codehead-test"))
     testImplementation(project(":database-test"))

@@ -16,7 +16,7 @@ dependencies {
 
     implementation(libs.javax.inject)
     implementation(libs.dagger)
-    annotationProcessor(libs.bundles.dagger.annotation)
+    annotationProcessor(libs.dagger.compiler)
     implementation(libs.immutables.annotations)
     annotationProcessor(libs.immutables.value)
 
@@ -32,7 +32,7 @@ dependencies {
     testImplementation(libs.bundles.testing)
     testImplementation(project(":codehead-test"))
     testImplementation(project(":metrics-test"))
-    testAnnotationProcessor(libs.bundles.dagger.annotation)
+    testAnnotationProcessor(libs.dagger.compiler)
     testAnnotationProcessor(libs.immutables.value)
 }
 
