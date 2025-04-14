@@ -2,15 +2,15 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-aspectj = "1.9.23"
+aspectj = "1.9.24"
 assertj = "3.27.3"
 aws-dynamodblocal = "2.6.0"
 awsSDK1 = "1.12.782"
-awsSDK2 = "2.31.16"
+awsSDK2 = "2.31.21"
 c3p0 = "0.10.2"
 caffine = "3.2.0"
 commons-codec = "1.18.0"
-commons-io = "2.18.0"
+commons-io = "2.19.0"
 dagger = "2.56.1"
 dropwizard4 = "4.0.13"
 jdbi = '3.49.0'
@@ -19,10 +19,10 @@ immutables = '2.10.1'
 hsqldb = '2.7.4'
 jackson = '2.18.3'
 jetcd = "0.8.5"
-junit-jupiter = "5.12.1"
+junit-jupiter = "5.12.2"
 liquibase = '4.31.1'
 logback = '1.5.18'
-micrometer = '1.14.5'
+micrometer = '1.14.6'
 metrics = '4.2.30'
 mokito = '5.17.0'
 pgjdbc = '42.7.5'
