@@ -46,9 +46,16 @@ publishing {
 }
 
 jreleaser {
+    gitRootSearch = true
+    strict = false
     signing {
         active = Active.ALWAYS
         armored = true
+    }
+    release {
+        github {
+            enabled = false
+        }
     }
 
     deploy {
@@ -58,9 +65,11 @@ jreleaser {
                     username = providers.gradleProperty("sonatypeUsername")
                     password = providers.gradleProperty("sonatypePassword")
 
+                    applyMavenCentralRules = true
                     active = Active.ALWAYS
                     url = "https://central.sonatype.com/api/v1/publisher"
-                    stagingRepositories = listOf("build/staging-deploy")
+                    //stagingRepositories = listOf("build/staging-deploy")
+                    stagingRepository("target/staging-deploy")
                 }
             }
         }
