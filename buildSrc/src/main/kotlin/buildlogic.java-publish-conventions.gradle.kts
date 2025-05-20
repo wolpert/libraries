@@ -1,17 +1,8 @@
 
 import org.jreleaser.model.Active
-import org.jreleaser.model.Signing
 plugins {
-    // Apply the java Plugin to add support for Java.
-    `java-library`
     `maven-publish`
-    signing
     id("org.jreleaser")
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
 }
 
 publishing {
@@ -51,12 +42,10 @@ publishing {
     }
 }
 
-val sonatypeUsername = providers.gradleProperty("sonatypeUsername")
-val sonatypePassword = providers.gradleProperty("sonatypePassword")
-
 jreleaser {
     gitRootSearch = true
     strict = false
+    dryrun = false
     signing {
         active = Active.ALWAYS
         armored = true
@@ -72,26 +61,15 @@ jreleaser {
             overwrite = true
         }
     }
-
     deploy {
         maven {
             mavenCentral {
                 register("sonatype") {
-                    username = sonatypeUsername
-                    password = sonatypePassword
-
-                    applyMavenCentralRules = true
-                    active = Active.RELEASE
+                    active = Active.ALWAYS
                     url = "https://central.sonatype.com/api/v1/publisher"
-                    //stagingRepositories = listOf("build/libs")
                     stagingRepository("build/staging-deploy")
                 }
             }
         }
     }
-}
-
-signing {
-    useGpgCmd()
-    sign(publishing.publications["mavenJava"])
 }
