@@ -1,4 +1,3 @@
-// For publishing, all of these are required in the top-level.
 
 allprojects {
     group = "com.codeheadsystems"
