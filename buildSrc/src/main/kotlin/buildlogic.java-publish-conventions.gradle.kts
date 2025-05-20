@@ -3,9 +3,15 @@ import org.jreleaser.model.Active
 import org.jreleaser.model.Signing
 plugins {
     // Apply the java Plugin to add support for Java.
+    `java-library`
     `maven-publish`
     signing
     id("org.jreleaser")
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 publishing {
@@ -45,6 +51,9 @@ publishing {
     }
 }
 
+val sonatypeUsername = providers.gradleProperty("sonatypeUsername")
+val sonatypePassword = providers.gradleProperty("sonatypePassword")
+
 jreleaser {
     gitRootSearch = true
     strict = false
@@ -54,66 +63,33 @@ jreleaser {
     }
     release {
         github {
-            enabled = false
+            enabled = true
+            repoOwner = "wolpert"
+            repoUrl = "https://github.com/wolpert/library"
+            skipRelease = true
+            skipTag = true
+            sign = true
+            overwrite = true
         }
     }
 
     deploy {
         maven {
             mavenCentral {
-                create("sonatype") {
-                    username = providers.gradleProperty("sonatypeUsername")
-                    password = providers.gradleProperty("sonatypePassword")
+                register("sonatype") {
+                    username = sonatypeUsername
+                    password = sonatypePassword
 
                     applyMavenCentralRules = true
-                    active = Active.ALWAYS
+                    active = Active.RELEASE
                     url = "https://central.sonatype.com/api/v1/publisher"
-                    //stagingRepositories = listOf("build/staging-deploy")
-                    stagingRepository("target/staging-deploy")
+                    //stagingRepositories = listOf("build/libs")
+                    stagingRepository("build/staging-deploy")
                 }
             }
         }
     }
-//    deploy {
-//        maven {
-//            mavenCentral {
-//                create("sonatype") {
-//                    active = Active.ALWAYS
-//                    url = "https://central.sonatype.com/api/v1/publisher"
-//                    stagingRepository("build/staging-deploy")
-//                }
-//            }
-//        }
-//    }
 }
-
-// V1
-//jreleaser {
-//    signing {
-//        active = Active.ALWAYS
-//        armored = true
-//        mode = Signing.Mode.MEMORY
-//
-//        passphrase = providers.gradleProperty("signingPassphrase")
-//        secretKey = providers.gradleProperty("signingSecretKey")
-//        publicKey = providers.gradleProperty("signingPublicKey")
-//    }
-//
-//    deploy {
-//        maven {
-//            mavenCentral {
-//                create("sonatype") {
-//                    username = providers.gradleProperty("mavenCentralUsername")
-//                    password = providers.gradleProperty("mavenCentralPassword")
-//
-//                    active = Active.ALWAYS
-//                    url = "https://central.sonatype.com/api/v1/publisher"
-//                    stagingRepositories = listOf("build/staging-deploy")
-//                }
-//            }
-//        }
-//    }
-//}
 
 signing {
     useGpgCmd()
