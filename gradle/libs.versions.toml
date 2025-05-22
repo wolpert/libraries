@@ -13,6 +13,7 @@ commons-codec = "1.18.0"
 commons-io = "2.19.0"
 dagger = "2.56.2"
 dropwizard4 = "4.0.13"
+jreleaser = '1.18.0'
 jdbi = '3.49.4'
 jsr305 = "3.0.2"
 immutables = '2.10.1'
@@ -72,6 +73,9 @@ mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-postgres = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+gradleplugin-jreleaser = { group = "org.jreleaser", name = "org.jreleaser.gradle.plugin", version.ref = "jreleaser" }
+[plugins]
+jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
 
 [bundles]
 caffine = ["caffine", "caffine-jcache"]
