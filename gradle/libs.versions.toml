@@ -6,8 +6,8 @@ aspectj = "1.9.24"
 assertj = "3.27.3"
 aws-dynamodblocal = "2.6.0"
 awsSDK1 = "1.12.783"
-awsSDK2 = "2.31.50"
-c3p0 = "0.11.0"
+awsSDK2 = "2.31.54"
+c3p0 = "0.11.1"
 caffine = "3.2.0"
 commons-codec = "1.18.0"
 commons-io = "2.19.0"
@@ -20,15 +20,15 @@ immutables = '2.10.1'
 hsqldb = '2.7.4'
 jackson = '2.19.0'
 jetcd = "0.8.5"
-junit-jupiter = "5.12.2"
+junit-jupiter = "5.13.0"
 liquibase = '4.32.0'
 logback = '1.5.18'
 micrometer = '1.15.0'
 metrics = '4.2.32'
 mokito = '5.18.0'
-pgjdbc = '42.7.5'
+pgjdbc = '42.7.6'
 slf4j = '2.0.17'
-testcontainers = '1.21.0'
+testcontainers = '1.21.1'
 
 [libraries]
 aspectjrt = { module = "org.aspectj:aspectjrt", version.ref = "aspectj" }
