@@ -2,6 +2,7 @@ package com.codeheadsystems.smr.dispatcher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class SynchronousDispatcherTest extends TestBase {
 
   @Mock private Consumer<Callback> consumer;
+  @Mock private Consumer<Callback> secondConsumer;
   @Mock private Context context;
   @Captor private ArgumentCaptor<Callback> callback;
 
@@ -52,6 +54,36 @@ class SynchronousDispatcherTest extends TestBase {
     assertThat(callback.getValue().context()).isEqualTo(context);
     assertThat(callback.getValue().state()).isEqualTo(ONE);
     assertThat(callback.getValue().phase()).isEqualTo(Phase.TICK);
+  }
+
+  /**
+   * Dispatch callbacks no exception.
+   */
+  @Test
+  void dispatchCallbacks_disable() {
+    dispatcher.enable(ONE, Phase.TICK, consumer);
+    dispatcher.disable(ONE, Phase.TICK, consumer);
+    dispatcher.dispatchCallbacks(context, ONE, Phase.TICK);
+    verify(consumer, never()).accept(callback.capture());
+  }
+
+  @Test
+  void dispatchCallbacks_multipleConsumers() {
+    dispatcher.enable(ONE, Phase.TICK, consumer);
+    dispatcher.enable(ONE, Phase.TICK, secondConsumer);
+    dispatcher.dispatchCallbacks(context, ONE, Phase.TICK);
+    verify(consumer).accept(callback.capture());
+    verify(secondConsumer).accept(callback.capture());
+  }
+
+  @Test
+  void dispatchCallbacks_multipleConsumersOneDisabled() {
+    dispatcher.enable(ONE, Phase.TICK, consumer);
+    dispatcher.enable(ONE, Phase.TICK, secondConsumer);
+    dispatcher.disable(ONE, Phase.TICK, consumer);
+    dispatcher.dispatchCallbacks(context, ONE, Phase.TICK);
+    verify(consumer, never()).accept(callback.capture());
+    verify(secondConsumer).accept(callback.capture());
   }
 
   /**
@@ -102,6 +134,5 @@ class SynchronousDispatcherTest extends TestBase {
     assertThat(callback.getAllValues().get(1).state()).isEqualTo(TWO);
     assertThat(callback.getAllValues().get(1).phase()).isEqualTo(Phase.ENTER);
   }
-
 
 }
