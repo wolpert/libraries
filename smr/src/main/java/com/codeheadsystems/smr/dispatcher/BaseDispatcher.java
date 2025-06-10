@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class BaseDispatcher implements Dispatcher {
-  protected static final Logger log = LoggerFactory.getLogger(SynchronousDispatcher.class);
+  protected static final Logger log = LoggerFactory.getLogger(BaseDispatcher.class);
   protected final Map<State, Set<Consumer<Callback>>[]> callbackMap;
 
   public BaseDispatcher(final Set<State> states) {
@@ -64,7 +64,7 @@ public abstract class BaseDispatcher implements Dispatcher {
 
   @Override
   public State changeState(final Context context, final State currentState, final State newState) {
-    return context.reference().getAndSet(newState);
+    return context.setState(newState).orElse(null);
   }
 
   @Override

@@ -51,15 +51,6 @@ public class StateMachine extends Context.Impl {
   }
 
   /**
-   * The current state of the state machine.
-   *
-   * @return the current state.
-   */
-  public State state() {
-    return state.get();
-  }
-
-  /**
    * Get the states that are valid for the current state machine.
    *
    * @return set of states.
@@ -133,7 +124,7 @@ public class StateMachine extends Context.Impl {
     final Optional<State> optionalNewState = definition.forEvent(currentState, event);
     if (optionalNewState.isPresent()) {
       final State newState = optionalNewState.get();
-      dispatcher.handleTransitionEvent(this, currentState, newState, event);
+      dispatcher.handleTransitionEvent(this, currentState, newState);
       return newState;
     } else {
       log.warn("No transition for event {} from state {}", event, currentState);
