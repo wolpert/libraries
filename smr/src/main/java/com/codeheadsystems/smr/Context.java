@@ -1,30 +1,28 @@
 package com.codeheadsystems.smr;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * You can have many contexts for a single state machine. And the
  * state machine manages this one context.
  */
-@FunctionalInterface
 public interface Context {
-
-  /**
-   * Reference atomic reference.
-   *
-   * @return the atomic reference
-   */
-  AtomicReference<State> reference();
 
   /**
    * State state.
    *
    * @return the state
    */
-  default State state() {
-    return reference().get();
-  }
+  State state();
 
+  /**
+   * Sets the current state to the new state, returning the existing state, if any.
+   *
+   * @param newState for the context.
+   * @return the old state
+   */
+  Optional<State> setState(State newState);
   /**
    * You can extend this to generate your own context easily enough.
    */
@@ -33,7 +31,7 @@ public interface Context {
     /**
      * The State.
      */
-    protected final AtomicReference<State> state;
+    private final AtomicReference<State> reference;
 
     /**
      * Instantiates a new .
@@ -41,12 +39,17 @@ public interface Context {
      * @param initialState the initial state
      */
     public Impl(State initialState) {
-      this.state = new AtomicReference<>(initialState);
+      this.reference = new AtomicReference<>(initialState);
     }
 
     @Override
-    public AtomicReference<State> reference() {
-      return state;
+    public State state() {
+      return reference.get();
+    }
+
+    @Override
+    public Optional<State> setState(State newState) {
+      return Optional.ofNullable(reference.getAndSet(newState));
     }
 
   }

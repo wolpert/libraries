@@ -38,7 +38,7 @@ public class TestBase {
   /**
    * The State machine definition.
    */
-  protected StateMachineDefinition stateMachineDefinition = StateMachineDefinition.builder()
+  public static StateMachineDefinition stateMachineDefinition = StateMachineDefinition.builder()
       .addState(ONE).addState(TWO).addState(THREE)
       .setInitialState(ONE)
       .addTransition(ONE, TO_TWO, TWO)
