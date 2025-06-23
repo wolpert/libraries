@@ -1,7 +1,7 @@
 plugins {
     id("buildlogic.java-library-conventions")
     id("buildlogic.java-publish-conventions")
-    id("io.freefair.aspectj.post-compile-weaving") version "8.13.1"
+    id("io.freefair.aspectj.post-compile-weaving") version "8.14"
 }
 dependencies {
     implementation(project(":metrics"))
