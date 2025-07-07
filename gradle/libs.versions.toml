@@ -4,9 +4,9 @@
 [versions]
 aspectj = "1.9.24"
 assertj = "3.27.3"
-aws-dynamodblocal = "2.6.0"
+aws-dynamodblocal = "2.6.1"
 awsSDK1 = "1.12.787"
-awsSDK2 = "2.31.73"
+awsSDK2 = "2.31.77"
 c3p0 = "0.11.2"
 caffine = "3.2.1"
 commons-codec = "1.18.0"
@@ -20,7 +20,7 @@ immutables = '2.11.0'
 hsqldb = '2.7.4'
 jackson = '2.19.1'
 jetcd = "0.8.5"
-junit-jupiter = "5.13.2"
+junit-jupiter = "5.13.3"
 liquibase = '4.32.0'
 logback = '1.5.18'
 micrometer = '1.15.1'
