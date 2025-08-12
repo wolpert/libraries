@@ -3,10 +3,10 @@
 
 [versions]
 aspectj = "1.9.24"
-assertj = "3.27.3"
+assertj = "3.27.4"
 aws-dynamodblocal = "2.6.1"
 awsSDK1 = "1.12.788"
-awsSDK2 = "2.32.14"
+awsSDK2 = "2.32.19"
 c3p0 = "0.11.2"
 caffine = "3.2.2"
 commons-codec = "1.19.0"
@@ -16,7 +16,7 @@ dropwizard4 = "4.0.15"
 jreleaser = '1.18.0'
 jdbi = '3.49.5'
 jsr305 = "3.0.2"
-immutables = '2.11.1'
+immutables = '2.11.2'
 hsqldb = '2.7.4'
 jackson = '2.19.2'
 jetcd = "0.8.5"
