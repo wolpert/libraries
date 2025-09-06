@@ -14,4 +14,5 @@ repositories {
 
 dependencies {
     implementation(libs.gradleplugin.jreleaser)
+    implementation("com.github.ben-manes:gradle-versions-plugin:0.52.0")
 }

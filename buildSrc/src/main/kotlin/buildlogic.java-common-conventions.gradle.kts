@@ -5,6 +5,7 @@
 plugins {
     // Apply the java Plugin to add support for Java.
     java
+    id("com.github.ben-manes.versions")
 }
 
 repositories {
