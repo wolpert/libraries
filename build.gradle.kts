@@ -7,5 +7,6 @@ allprojects {
 plugins {
     id("nl.littlerobots.version-catalog-update") version "1.0.0"
 }
+
 // gradle jreleaserConfig
 // gradle clean build test publish jreleaserDeploy

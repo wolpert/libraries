@@ -42,4 +42,3 @@ All libraries are available on maven central.
 | smr                  | 5tate Machine Library              | ![State Machine Redux](https://img.shields.io/maven-central/v/com.codeheadsystems/smr)           |
 | smr-metrics          | 5tate Machine Metrics addon        | ![State Machine Redux](https://img.shields.io/maven-central/v/com.codeheadsystems/smr-metrics)   |
 | smr-yml              | 5tate Machine YAML support         | ![State Machine Redux](https://img.shields.io/maven-central/v/com.codeheadsystems/smr-yml)       |
-
