@@ -15,7 +15,9 @@ Or to be more blunt, I'm lazy.
 
 ## Java support
 
-Requires JDK 17 or higher.
+For JDK 17, use 3.0.x versions.
+
+For JDK 21, use 3.1.x versions.
 
 ## Installation
 

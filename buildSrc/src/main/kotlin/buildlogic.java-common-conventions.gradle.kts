@@ -19,7 +19,7 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
     withJavadocJar()
     withSourcesJar()
@@ -31,7 +31,5 @@ tasks.named<Test>("test") {
 }
 
 tasks.javadoc {
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-    }
+    (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
 }
