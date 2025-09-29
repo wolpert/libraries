@@ -4,7 +4,7 @@ allprojects {
     version = "3.1.0-SNAPSHOT"
 }
 plugins {
-    id("nl.littlerobots.version-catalog-update") version "1.0.0"
+    id("nl.littlerobots.version-catalog-update") version "1.0.1"
 }
 
 // gradle jreleaserConfig
