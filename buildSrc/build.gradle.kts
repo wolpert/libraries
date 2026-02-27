@@ -8,11 +8,6 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
+    // Use the plugin portal to apply community plugins in convention plugins.
     gradlePluginPortal()
-}
-
-dependencies {
-    implementation(libs.gradleplugin.jreleaser)
-    implementation("com.github.ben-manes:gradle-versions-plugin:0.52.0")
 }

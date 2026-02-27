@@ -7,6 +7,6 @@ plugins {
     id("buildlogic.java-common-conventions")
     id("buildlogic.jacoco-conventions")
 
-    // Apply the java-library plugin for API and implementation separation.
-    `java-library`
+    // Apply the application plugin to add support for building a CLI application in Java.
+    application
 }

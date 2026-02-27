@@ -4,7 +4,7 @@ description = "Database testing utilities for DynamoDB"
 
 plugins {
     id("buildlogic.java-library-conventions")
-    id("buildlogic.java-publish-conventions")
+    id("buildlogic.publish-conventions")
 }
 
 dependencies {

@@ -1,7 +1,7 @@
 
 plugins {
     id("buildlogic.java-library-conventions")
-    id("buildlogic.java-publish-conventions")
+    id("buildlogic.publish-conventions")
 }
 
 project.description = "Provides YAML support for the simplified state machine"

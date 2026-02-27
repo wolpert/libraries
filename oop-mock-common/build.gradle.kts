@@ -1,6 +1,6 @@
 plugins {
     id("buildlogic.java-library-conventions")
-    id("buildlogic.java-publish-conventions")
+    id("buildlogic.publish-conventions")
 }
 dependencies {
     implementation(libs.slf4j.api)
