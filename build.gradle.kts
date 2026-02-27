@@ -1,11 +1,5 @@
-
-allprojects {
-    group = "com.codeheadsystems"
-    version = "3.1.0-SNAPSHOT"
+// Repositories needed for nmcp plugin runtime dependencies
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
 }
-plugins {
-    id("nl.littlerobots.version-catalog-update") version "1.1.0"
-}
-
-// gradle jreleaserConfig
-// gradle clean build test publish jreleaserDeploy

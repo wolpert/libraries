@@ -1,6 +1,6 @@
 plugins {
     id("buildlogic.java-library-conventions")
-    id("buildlogic.java-publish-conventions")
+    id("buildlogic.publish-conventions")
     id("io.freefair.aspectj.post-compile-weaving") version "9.2.0"
 }
 dependencies {

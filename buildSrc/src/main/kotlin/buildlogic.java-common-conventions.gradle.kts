@@ -5,15 +5,23 @@
 plugins {
     // Apply the java Plugin to add support for Java.
     java
-    id("com.github.ben-manes.versions")
+    idea
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
+    mavenLocal()
     mavenCentral()
+    gradlePluginPortal()  // was jcenter() which is dying
+    google()
+
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://oss.sonatype.org/content/repositories/releases/")
+    maven("https://s3-us-west-2.amazonaws.com/dynamodb-local/release/")
 }
 
 dependencies {
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -26,10 +34,16 @@ java {
 }
 
 tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
 
+// Ensure we have lint warnings displayed so we can fix or  @SuppressWarnings("unchecked")
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-Xlint:unchecked")
+}
+
 tasks.javadoc {
-    (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
 }

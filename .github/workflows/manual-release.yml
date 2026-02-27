@@ -1,0 +1,232 @@
+name: Manual Build Release to Maven Central
+
+on:
+  workflow_dispatch:
+
+jobs:
+  auto-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for git tags
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest tag and increment version
+        id: version
+        run: |
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Get the latest tag matching semantic versioning
+          LATEST_TAG=$(git tag -l "v[0-9]*.[0-9]*.[0-9]*" --sort=-v:refname | head -n 1)
+
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No existing tags found, starting with v0.0.1"
+            NEW_VERSION="0.0.1"
+            NEW_TAG="v0.0.1"
+          else
+            echo "Latest tag: $LATEST_TAG"
+
+            # Extract version without 'v' prefix
+            VERSION=${LATEST_TAG#v}
+
+            # Split version into major.minor.patch
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+            # Strip any pre-release suffix from patch before incrementing (e.g., "0-alpha" -> "0")
+            PATCH=${PATCH%%-*}
+
+            # Increment patch version
+            PATCH=$((PATCH + 1))
+
+            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+            NEW_TAG="v$NEW_VERSION"
+          fi
+
+          echo "New version: $NEW_VERSION"
+          echo "New tag: $NEW_TAG"
+
+          # Export to GitHub env
+          echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "TAG=$NEW_TAG" >> $GITHUB_ENV
+
+          # Create and push the tag
+          git tag -a "$NEW_TAG" -m "Auto-release $NEW_VERSION"
+          git push origin "$NEW_TAG"
+
+          echo "Created and pushed tag: $NEW_TAG"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Verify version matches tag
+        run: |
+          GRADLE_VERSION=$(./gradlew properties -q | grep "^version:" | awk '{print $2}')
+          echo "Gradle version: $GRADLE_VERSION"
+          echo "Expected version: $VERSION"
+          if [ "$GRADLE_VERSION" != "$VERSION" ]; then
+            echo "ERROR: Gradle version ($GRADLE_VERSION) does not match tag version ($VERSION)"
+            exit 1
+          fi
+
+      - name: Build and test
+        run: ./gradlew clean build test
+
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | base64 -d | gpg --batch --import
+          # Test signing capability
+          echo "test" | gpg --clearsign --batch --yes --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" > /dev/null
+          echo "GPG key imported and tested successfully"
+
+      - name: Configure GPG for signing
+        run: |
+          # Configure gpg for non-interactive signing
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpg-connect-agent reloadagent /bye
+
+      - name: Publish to Maven Central
+        env:
+          CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+          CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+        run: |
+          # Export GPG_TTY for passphrase
+          export GPG_TTY=$(tty)
+
+          # Create gradle.properties with GPG credentials
+          cat > ~/.gradle/gradle.properties << EOF
+          signing.gnupg.keyName=$GPG_KEY_ID
+          signing.gnupg.passphrase=$GPG_PASSPHRASE
+          EOF
+
+          chmod 600 ~/.gradle/gradle.properties
+
+          # Publish to Maven Central via Central Portal
+          ./gradlew publishAggregationToCentralPortal \
+            --no-daemon \
+            --stacktrace
+
+      - name: Build distribution archives
+        run: |
+          ./gradlew :codehead-test:jar :codehead-test:javadocJar :codehead-test:sourcesJar
+          ./gradlew :database-test:jar :database-test:javadocJar :database-test:sourcesJar
+          ./gradlew :feature-flag:jar :feature-flag:javadocJar :feature-flag:sourcesJar
+          ./gradlew :feature-flag-ddb:jar :feature-flag-ddb:javadocJar :feature-flag-ddb:sourcesJar
+          ./gradlew :feature-flag-etcd:jar :feature-flag-etcd:javadocJar :feature-flag-etcd:sourcesJar
+          ./gradlew :feature-flag-metrics:jar :feature-flag-metrics:javadocJar :feature-flag-metrics:sourcesJar
+          ./gradlew :feature-flag-sql:jar :feature-flag-sql:javadocJar :feature-flag-sql:sourcesJar
+          ./gradlew :local-queue:jar :local-queue:javadocJar :local-queue:sourcesJar
+          ./gradlew :metrics:jar :metrics:javadocJar :metrics:sourcesJar
+          ./gradlew :metrics-declarative:jar :metrics-declarative:javadocJar :metrics-declarative:sourcesJar
+          ./gradlew :metrics-micrometer:jar :metrics-micrometer:javadocJar :metrics-micrometer:sourcesJar
+          ./gradlew :metrics-test:jar :metrics-test:javadocJar :metrics-test:sourcesJar
+          ./gradlew :oop-mock:jar :oop-mock:javadocJar :oop-mock:sourcesJar
+          ./gradlew :oop-mock-client:jar :oop-mock-client:javadocJar :oop-mock-client:sourcesJar
+          ./gradlew :oop-mock-common:jar :oop-mock-common:javadocJar :oop-mock-common:sourcesJar
+          ./gradlew :oop-mock-dynamodb:jar :oop-mock-dynamodb:javadocJar :oop-mock-dynamodb:sourcesJar
+          ./gradlew :oop-mock-tests:jar :oop-mock-tests:javadocJar :oop-mock-tests:sourcesJar
+          ./gradlew :smr:jar :smr:javadocJar :smr:sourcesJar
+          ./gradlew :smr-metrics:jar :smr-metrics:javadocJar :smr-metrics:sourcesJar
+          ./gradlew :smr-yml:jar :smr-yml:javadocJar :smr-yml:sourcesJar
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: Release ${{ env.VERSION }}
+          body: |
+            ## Codehead Systems Libraries ${{ env.VERSION }}
+
+            **Auto-released** on merge to main.
+
+            ### Maven Central
+
+            ```xml
+            <dependency>
+              <groupId>com.codeheadsystems</groupId>
+              <artifactId>smr</artifactId>
+              <version>${{ env.VERSION }}</version>
+            </dependency>
+            ```
+
+            ```gradle
+            implementation("com.codeheadsystems:smr:${{ env.VERSION }}")
+            ```
+
+            ### Modules Published
+            - `com.codeheadsystems:codehead-test:${{ env.VERSION }}`
+            - `com.codeheadsystems:database-test:${{ env.VERSION }}`
+            - `com.codeheadsystems:feature-flag:${{ env.VERSION }}`
+            - `com.codeheadsystems:feature-flag-ddb:${{ env.VERSION }}`
+            - `com.codeheadsystems:feature-flag-etcd:${{ env.VERSION }}`
+            - `com.codeheadsystems:feature-flag-metrics:${{ env.VERSION }}`
+            - `com.codeheadsystems:feature-flag-sql:${{ env.VERSION }}`
+            - `com.codeheadsystems:local-queue:${{ env.VERSION }}`
+            - `com.codeheadsystems:metrics:${{ env.VERSION }}`
+            - `com.codeheadsystems:metrics-declarative:${{ env.VERSION }}`
+            - `com.codeheadsystems:metrics-micrometer:${{ env.VERSION }}`
+            - `com.codeheadsystems:metrics-test:${{ env.VERSION }}`
+            - `com.codeheadsystems:oop-mock:${{ env.VERSION }}`
+            - `com.codeheadsystems:oop-mock-client:${{ env.VERSION }}`
+            - `com.codeheadsystems:oop-mock-common:${{ env.VERSION }}`
+            - `com.codeheadsystems:oop-mock-dynamodb:${{ env.VERSION }}`
+            - `com.codeheadsystems:oop-mock-tests:${{ env.VERSION }}`
+            - `com.codeheadsystems:smr:${{ env.VERSION }}`
+            - `com.codeheadsystems:smr-metrics:${{ env.VERSION }}`
+            - `com.codeheadsystems:smr-yml:${{ env.VERSION }}`
+
+            ### What's Changed
+            See commits since last release for details.
+
+            **Note:** Artifacts may take up to 2 hours to appear in Maven Central after release.
+          files: |
+            codehead-test/build/libs/*.jar
+            database-test/build/libs/*.jar
+            feature-flag/build/libs/*.jar
+            feature-flag-ddb/build/libs/*.jar
+            feature-flag-etcd/build/libs/*.jar
+            feature-flag-metrics/build/libs/*.jar
+            feature-flag-sql/build/libs/*.jar
+            local-queue/build/libs/*.jar
+            metrics/build/libs/*.jar
+            metrics-declarative/build/libs/*.jar
+            metrics-micrometer/build/libs/*.jar
+            metrics-test/build/libs/*.jar
+            oop-mock/build/libs/*.jar
+            oop-mock-client/build/libs/*.jar
+            oop-mock-common/build/libs/*.jar
+            oop-mock-dynamodb/build/libs/*.jar
+            oop-mock-tests/build/libs/*.jar
+            smr/build/libs/*.jar
+            smr-metrics/build/libs/*.jar
+            smr-yml/build/libs/*.jar
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::Auto-release failed! Check logs for details."
